@@ -65,7 +65,8 @@ public class StatisticServiceImpl implements StatisticService {
 
 /*
         this.checkLocalDateTime(start, end);
-        boolean emptyUris = uris.isEmpty();
+        final boolean emptyUris = uris.isEmpty();
+
         final String sqlCount = "count(" + (unique ? "distinct h.ip" : "*") + ")";
 
         final String sqlBaseQuery = "select new ru.practicum.HitDto(h.app, h.uri," + sqlCount + ")" +
@@ -115,7 +116,7 @@ public class StatisticServiceImpl implements StatisticService {
                     .stream()
 
                     .filter(endpointHit ->
-                            uris.stream().anyMatch(u -> endpointHit.getUri().toUpperCase().contains(u.toUpperCase()))
+                            uris.stream().anyMatch(u -> endpointHit.getUri().equalsIgnoreCase(u))
                                     && !endpointHit.getCreated().isBefore(start)
                                     && !endpointHit.getCreated().isAfter(end))
 
