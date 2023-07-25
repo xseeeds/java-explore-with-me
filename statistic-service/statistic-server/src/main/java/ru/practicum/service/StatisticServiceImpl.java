@@ -11,21 +11,14 @@ import ru.practicum.mapper.Mapper;
 import ru.practicum.model.EndpointHit;
 import ru.practicum.storage.StatisticRepository;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
     private final StatisticRepository repository;
-    private final EntityManager entityManager;
 
     @Override
     @Transactional
@@ -40,8 +33,6 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     @Transactional(readOnly = true)
     public List<HitDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-
-/*
         this.checkLocalDateTime(start, end);
         final List<HitDto> hitDtoList;
 
@@ -61,99 +52,6 @@ public class StatisticServiceImpl implements StatisticService {
 
         log.info("Получен hitDtoList size => {}", hitDtoList.size());
         return hitDtoList;
-*/
-
-/*
-        this.checkLocalDateTime(start, end);
-        final boolean emptyUris = uris.isEmpty();
-
-        final String sqlCount = "count(" + (unique ? "distinct h.ip" : "*") + ")";
-
-        final String sqlBaseQuery = "select new ru.practicum.HitDto(h.app, h.uri," + sqlCount + ")" +
-                " from EndpointHit h " +
-                " where h.created between :start and :end" + (!emptyUris ? " and h.uri in (:uris)" : "") +
-                " group by app, uri" +
-                " order by " + sqlCount + " desc";
-
-        final TypedQuery<HitDto> hitStatDtoTypedQuery = entityManager.createQuery(sqlBaseQuery, HitDto.class)
-                .setParameter("start", start)
-                .setParameter("end", end);
-        if (!emptyUris) {
-            hitStatDtoTypedQuery.setParameter("uris", uris);
-        }
-        final List<HitDto> hitDtoList = hitStatDtoTypedQuery.getResultList();
-
-        log.info("Получен hitDtoList size => {}", hitDtoList.size());
-        return hitDtoList;
-*/
-
-        this.checkLocalDateTime(start, end);
-        final List<EndpointHit> endpointHitList = repository.findAll();
-
-/*
-        if (uris.isEmpty()) {
-            endpointHitList = repository.findByDatetime(start, end);
-        } else {
-            endpointHitList = repository.findByDatetimeAndUris(start, end, uris);
-        }
-*/
-
-        final List<HitDto> hitDtoList;
-
-        final Map<String, List<EndpointHit>> mapByUri;
-        if (uris.isEmpty()) {
-            mapByUri = endpointHitList
-                    .stream()
-
-                    .filter(endpointHit ->
-                            !endpointHit.getCreated().isBefore(start)
-                                    && !endpointHit.getCreated().isAfter(end))
-
-                    .collect(
-                            groupingBy(EndpointHit::getUri));
-        } else {
-            mapByUri = endpointHitList
-                    .stream()
-
-                    .filter(endpointHit ->
-                            uris.stream().anyMatch(u -> endpointHit.getUri().equalsIgnoreCase(u))
-                                    && !endpointHit.getCreated().isBefore(start)
-                                    && !endpointHit.getCreated().isAfter(end))
-
-                    .collect(
-                            groupingBy(EndpointHit::getUri));
-        }
-        if (!unique) {
-            hitDtoList = mapByUri
-                    .keySet()
-                    .stream()
-                    .map(key ->
-                            new HitDto(
-                                    mapByUri.get(key).get(0).getApp(),
-                                    key,
-                                    (long) mapByUri.get(key).size()))
-                    .collect(toList());
-        } else {
-            hitDtoList = mapByUri
-                    .keySet()
-                    .stream()
-                    .map(key ->
-                            new HitDto(
-                                    mapByUri.get(key).get(0).getApp(),
-                                    key,
-                                    mapByUri.get(key)
-                                            .stream()
-                                            .map(EndpointHit::getIp)
-                                            .distinct()
-                                            .count()))
-                    .collect(toList());
-        }
-        hitDtoList.sort(comparing(HitDto::getHits).reversed());
-
-        log.info("Получен hitDtoList size => {}", hitDtoList.size());
-        return hitDtoList;
-
-
     }
 
     private void checkLocalDateTime(LocalDateTime start, LocalDateTime end) {

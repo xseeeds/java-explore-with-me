@@ -1,12 +1,10 @@
 package ru.practicum.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.HitDto;
 import ru.practicum.StatisticDto;
@@ -19,12 +17,13 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class StatServiceUnitTest {
     @Mock
     private StatisticRepository statisticRepository;
-
     @InjectMocks
     private StatisticServiceImpl statisticService;
 
@@ -78,7 +77,7 @@ class StatServiceUnitTest {
 
         statisticService.addStatistic(statisticDto);
 
-        verify(statisticRepository, Mockito.times(1))
+        verify(statisticRepository, times(1))
                 .save(endpointHit);
     }
 
@@ -87,12 +86,12 @@ class StatServiceUnitTest {
         final List<HitDto> expectedList;
         final List<HitDto> actualList;
 
-        when(statisticRepository.findAll())
-                .thenReturn(List.of(endpointHitWithId));
+        when(statisticRepository.findAllStatistics(now.minusDays(1), now.plusDays(1)))
+                .thenReturn(List.of(hitDto));
 
         expectedList = List.of(hitDto);
         actualList = statisticService.getStatistics(now.minusDays(1), now.plusDays(1), List.of(), false);
 
-        Assertions.assertEquals(expectedList, actualList);
+        assertEquals(expectedList, actualList);
     }
 }

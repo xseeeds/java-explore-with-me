@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.DefaultDateTimeFormatter.PATTERN;
+import static ru.practicum.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Slf4j
 @Validated
@@ -37,8 +37,8 @@ public class StatisticController {
     }
 
     @GetMapping("/stats")
-    public List<HitDto> getStatistics(@RequestParam @DateTimeFormat(pattern = PATTERN) LocalDateTime start,
-                                      @RequestParam @DateTimeFormat(pattern = PATTERN) LocalDateTime end,
+    public List<HitDto> getStatistics(@RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime start,
+                                      @RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime end,
                                       @RequestParam(defaultValue = "") List<String> uris,
                                       @RequestParam(defaultValue = "false") boolean unique) {
         log.info("STATISTIC-SERVER => Запрошена статистика по посещениям с {} по {}", start, end);

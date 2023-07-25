@@ -40,13 +40,4 @@ public interface StatisticRepository extends JpaRepository<EndpointHit, Long> {
             "ORDER BY COUNT(h.ip) DESC")
     List<HitDto> findAllStatisticsForUniqueIp(LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT h FROM EndpointHit AS h " +
-            "WHERE h.created BETWEEN ?1 AND ?2")
-    List<EndpointHit> findByDatetime(LocalDateTime start, LocalDateTime end);
-
-    @Query("SELECT h FROM EndpointHit AS h " +
-            "WHERE h.created BETWEEN ?1 AND ?2 " +
-            "AND h.uri IN ?3")
-    List<EndpointHit> findByDatetimeAndUris(LocalDateTime start, LocalDateTime end, List<String> uris);
-
 }

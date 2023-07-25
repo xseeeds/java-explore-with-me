@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
-import static ru.practicum.DefaultDateTimeFormatter.PATTERN;
+import static ru.practicum.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Data
 @Builder
@@ -35,7 +35,7 @@ public class StatisticDto {
     @NotNull
     @PastOrPresent
     @JsonProperty("timestamp")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime created;
 
 }

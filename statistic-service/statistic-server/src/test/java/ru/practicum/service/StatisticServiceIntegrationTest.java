@@ -2,7 +2,6 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,10 @@ import ru.practicum.storage.StatisticRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 class StatisticServiceIntegrationTest {
     private final StatisticService statisticService;
     private final StatisticRepository statisticRepository;
@@ -54,6 +54,6 @@ class StatisticServiceIntegrationTest {
                         List.of(),
                         false);
 
-        Assertions.assertEquals(expectedList, actualList);
+       assertEquals(expectedList, actualList);
     }
 }
