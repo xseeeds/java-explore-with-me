@@ -1,6 +1,5 @@
 package ru.server.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
