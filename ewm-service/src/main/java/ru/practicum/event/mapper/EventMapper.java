@@ -1,10 +1,7 @@
 package ru.practicum.event.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.event.EventFullDto;
-import ru.defaultComponent.ewmService.dto.event.EventShortDto;
-import ru.defaultComponent.ewmService.dto.event.LocationDto;
-import ru.defaultComponent.ewmService.dto.event.NewEventDto;
+import ru.defaultComponent.ewmService.dto.event.*;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.event.model.EventEntity;
 import ru.practicum.category.mapper.CategoryMapper;
@@ -15,46 +12,44 @@ import ru.practicum.user.model.UserEntity;
 
 import java.time.LocalDateTime;
 
-import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.getLocalDateTimeFormatting;
-
 @UtilityClass
 public class EventMapper {
 
-    public EventEntity toEventEntity(NewEventDto newEventDto, UserEntity userEntity, CategoryEntity categoryEntity) {
+    public EventEntity toNewEventEntity(CreateEventRequestDto createEventRequestDto, UserEntity userEntity, CategoryEntity categoryEntity) {
         return EventEntity
                 .builder()
-                .annotation(newEventDto.getAnnotation())
+                .annotation(createEventRequestDto.getAnnotation())
                 .categoryEntity(categoryEntity)
                 .category(categoryEntity.getId())
                 .confirmedRequests(0)
                 .createdOn(LocalDateTime.now())
-                .description(newEventDto.getDescription())
-                .eventDate(getLocalDateTimeFormatting(newEventDto.getEventDate()))
+                .description(createEventRequestDto.getDescription())
+                .eventDate(createEventRequestDto.getEventDate())
                 .initiatorEntity(userEntity)
                 .initiator(userEntity.getId())
-                .location(toLocation(newEventDto.getLocation()))
-                .paid(newEventDto.getPaid())
-                .participantLimit(newEventDto.getParticipantLimit())
+                .location(toLocation(createEventRequestDto.getLocation()))
+                .paid(createEventRequestDto.getPaid())
+                .participantLimit(createEventRequestDto.getParticipantLimit())
                 .publishedOn(LocalDateTime.now())
-                .requestModeration(newEventDto.getRequestModeration())
+                .requestModeration(createEventRequestDto.getRequestModeration())
                 .state(EventState.PENDING)
-                .title(newEventDto.getTitle())
+                .title(createEventRequestDto.getTitle())
                 .views(0)
                 .build();
     }
 
-    public EventFullDto toEventFullDto(EventEntity eventEntity) {
-        return EventFullDto
+    public EventFullResponseDto toEventFullResponseDto(EventEntity eventEntity) {
+        return EventFullResponseDto
                 .builder()
                 .id(eventEntity.getId())
                 .annotation(eventEntity.getAnnotation())
-                .category(CategoryMapper.toCategoryDto(eventEntity.getCategoryEntity()))
+                .category(CategoryMapper.toCategoryResponseDto(eventEntity.getCategoryEntity()))
                 .confirmedRequests(eventEntity.getConfirmedRequests())
                 .createdOn(eventEntity.getCreatedOn())
                 .description(eventEntity.getDescription())
                 .eventDate(eventEntity.getEventDate())
-                .initiator(UserMapper.toUserShortDto(eventEntity.getInitiatorEntity()))
-                .location(toLocationDto(eventEntity.getLocation()))
+                .initiator(UserMapper.toUserShortResponseDto(eventEntity.getInitiatorEntity()))
+                .location(toLocationResponseDto(eventEntity.getLocation()))
                 .paid(eventEntity.getPaid())
                 .participantLimit(eventEntity.getParticipantLimit())
                 .publishedOn(eventEntity.getPublishedOn())
@@ -65,31 +60,31 @@ public class EventMapper {
                 .build();
     }
 
-    public EventShortDto toEventShortDto(EventEntity eventEntity) {
-        return EventShortDto
+    public EventShortResponseDto toEventShortResponseDto(EventEntity eventEntity) {
+        return EventShortResponseDto
                 .builder()
                 .annotation(eventEntity.getAnnotation())
-                .category(CategoryMapper.toCategoryDto(eventEntity.getCategoryEntity()))
+                .category(CategoryMapper.toCategoryResponseDto(eventEntity.getCategoryEntity()))
                 .confirmedRequests(eventEntity.getConfirmedRequests())
                 .eventDate(eventEntity.getEventDate())
                 .id(eventEntity.getId())
-                .initiator(UserMapper.toUserShortDto(eventEntity.getInitiatorEntity()))
+                .initiator(UserMapper.toUserShortResponseDto(eventEntity.getInitiatorEntity()))
                 .paid(eventEntity.getPaid())
                 .title(eventEntity.getTitle())
                 .views(eventEntity.getViews())
                 .build();
     }
 
-    public Location toLocation(LocationDto locationDto) {
+    public Location toLocation(LocationRequestDto locationRequestDto) {
         return Location
                 .builder()
-                .lat(locationDto.getLat())
-                .lon(locationDto.getLon())
+                .lat(locationRequestDto.getLat())
+                .lon(locationRequestDto.getLon())
                 .build();
     }
 
-    public LocationDto toLocationDto(Location location) {
-        return LocationDto
+    public LocationResponseDto toLocationResponseDto(Location location) {
+        return LocationResponseDto
                 .builder()
                 .lat(location.getLat())
                 .lon(location.getLon())

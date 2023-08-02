@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.request;
+package ru.defaultComponent.ewmService.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.dto.event.LocationDto;
+import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
 import ru.defaultComponent.ewmService.enums.StateAdminRequest;
 
 import javax.validation.constraints.Size;
@@ -20,7 +20,7 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateEventAdminRequest {
+public class UpdateEventAdminRequestDto {
 
     @Size(min = 20, max = 2000)
     String annotation;
@@ -33,7 +33,7 @@ public class UpdateEventAdminRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime eventDate;
 
-    LocationDto location;
+    LocationRequestDto location;
 
     Boolean paid;
 

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.category.CategoryDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryRequestDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.practicum.category.service.CategoryAdminService;
 
 import javax.validation.Valid;
@@ -29,17 +30,17 @@ public class CategoriesAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto addCategory(@Valid @RequestBody CategoryDto categoryDto) {
-        log.info("EWM-SERVICE-admin => Запрошено добавление новой категории => {}", categoryDto);
-        return categoryAdminService.addCategory(categoryDto);
+    public CategoryResponseDto addCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрошено добавление новой категории => {}", categoryRequestDto);
+        return categoryAdminService.addCategory(categoryRequestDto);
     }
 
     @PatchMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto updateCategory(@Positive @PathVariable long categoryId,
-                                      @Valid @RequestBody CategoryDto categoryDto) {
-        log.info("EWM-SERVICE-admin => Запрошено обновление категории по id => {} => {}", categoryId, categoryDto);
-        return categoryAdminService.updateCategory(categoryId, categoryDto);
+    public CategoryResponseDto updateCategory(@Positive @PathVariable long categoryId,
+                                             @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрошено обновление категории по id => {} => {}", categoryId, categoryRequestDto);
+        return categoryAdminService.updateCategory(categoryId, categoryRequestDto);
     }
 
     @DeleteMapping("/{categoryId}")

@@ -7,14 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.defaultComponent.ewmService.dto.compilation.CompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationDto;
+import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationRequestDto;
+import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.CompilationEntity;
 import ru.practicum.compilation.dao.CompilationRepository;
-import ru.practicum.event.model.EventEntity;
 import ru.practicum.event.service.EventAdminService;
 
 import java.util.List;
@@ -31,46 +30,42 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
     @Transactional
     @Modifying
     @Override
-    public CompilationDto addCompilation(CreateCompilationDto createCompilationDto) {
-        final List<EventEntity> eventEntityList;
-        if (createCompilationDto.getEvents() == null) {
-            eventEntityList = List.of();
-        } else {
-            eventEntityList = eventAdminService.findAllByIds(createCompilationDto.getEvents());
+    public CompilationResponseDto addCompilation(CreateCompilationRequestDto createCompilationRequestDto) {
+        final CompilationEntity compilationEntity = CompilationMapper.toCompilationEntity(createCompilationRequestDto);
+        if (createCompilationRequestDto.getEvents() != null) {
+            compilationEntity.setEvents(
+                    eventAdminService.findAllByIds(
+                            createCompilationRequestDto.getEvents()));
         }
-        final CompilationDto compilationDto = CompilationMapper
-                .toComplicationDto(
-                        compilationRepository.save(
-                                CompilationMapper.toCompilationEntity(createCompilationDto, eventEntityList)));
-        log.info("ADMIN => Создана новая подборка событий => {}", compilationDto);
-        return compilationDto;
+        final CompilationResponseDto compilationResponseDto = CompilationMapper
+                .toCompilationResponseDto(
+                        compilationRepository.save(compilationEntity));
+        log.info("ADMIN => Создана новая подборка событий => {}", compilationResponseDto);
+        return compilationResponseDto;
     }
 
     @Transactional
     @Modifying
     @Override
-    public CompilationDto updateCompilation(long compilationId,
-                                            UpdateCompilationDto compilationDto) throws NotFoundException {
-        final CompilationEntity compilationEntity = this
-                .findCompilationEntityById(compilationId);
-        final List<EventEntity> eventEntityList;
-        if (compilationDto.getEventsIds() == null) {
-            eventEntityList = List.of();
-        } else {
-            eventEntityList = eventAdminService.findAllByIds(compilationDto.getEventsIds());
+    public CompilationResponseDto updateCompilation(long compilationId,
+                                                    UpdateCompilationRequestDto updateCompilationRequestDto) throws NotFoundException {
+        final CompilationEntity compilationEntity = this.findCompilationEntityById(compilationId);
+        if (updateCompilationRequestDto.getEvents() != null) {
+            compilationEntity.setEvents(
+                    eventAdminService.findAllByIds(
+                                    updateCompilationRequestDto.getEvents()));
         }
-        compilationEntity.setEvents(eventEntityList);
-        if (compilationDto.getPinned() != null) {
-            compilationEntity.setPinned(compilationDto.getPinned());
+        if (updateCompilationRequestDto.getPinned() != null) {
+            compilationEntity.setPinned(updateCompilationRequestDto.getPinned());
         }
-        if (compilationDto.getTitle() != null) {
-            compilationEntity.setTitle(compilationDto.getTitle());
+        if (updateCompilationRequestDto.getTitle() != null) {
+            compilationEntity.setTitle(updateCompilationRequestDto.getTitle());
         }
-        final CompilationDto updatedCompilationDto = CompilationMapper
-                .toComplicationDto(
+        final CompilationResponseDto updatedCompilationResponseDto = CompilationMapper
+                .toCompilationResponseDto(
                         compilationRepository.save(compilationEntity));
         log.info("ADMIN => Обновлена подборка событий с id => {}", compilationId);
-        return updatedCompilationDto;
+        return updatedCompilationResponseDto;
     }
 
     @Transactional
@@ -99,22 +94,22 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
     }
 
     @Override
-    public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
-        final Page<CompilationDto> compilationDtoPage = compilationRepository
+    public List<CompilationResponseDto> getCompilations(Boolean pinned, int from, int size) {
+        final Page<CompilationResponseDto> compilationDtoPage = compilationRepository
                 .findAllByPinned(pinned, PageRequest.of(from / size, size))
-                .map(CompilationMapper::toComplicationDto);
+                .map(CompilationMapper::toCompilationResponseDto);
         log.info("PUBLIC => Запрошен список подборок событий size => {} с параметром pinned => {}",
                 compilationDtoPage.getTotalElements(), pinned);
         return compilationDtoPage.getContent();
     }
 
     @Override
-    public CompilationDto getCompilationById(long compilationId) {
-        final CompilationDto compilationDto = CompilationMapper
-                .toComplicationDto(
+    public CompilationResponseDto getCompilationById(long compilationId) {
+        final CompilationResponseDto compilationResponseDto = CompilationMapper
+                .toCompilationResponseDto(
                         this.findCompilationEntityById(compilationId));
         log.info("PUBLIC => Запрошена подборка событий с id => {}", compilationId);
-        return compilationDto;
+        return compilationResponseDto;
     }
 
 }

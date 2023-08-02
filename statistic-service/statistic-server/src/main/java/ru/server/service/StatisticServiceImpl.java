@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.server.mapper.StatisticMapper;
 import ru.server.dao.StatisticRepository;
@@ -29,13 +29,13 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     @Transactional
     @Modifying
-    public StatisticDto addStatistic(StatisticDto statisticDto) {
-        final StatisticDto createdStatisticDto = StatisticMapper
-                .toStatisticDto(
+    public StatisticRequest addStatistic(StatisticRequest statisticRequest) {
+        final StatisticRequest createdStatisticRequest = StatisticMapper
+                .toStatisticRequest(
                         statisticRepository.save(
-                                StatisticMapper.toEndpointHitEntity(statisticDto)));
-        log.info("STATISTIC => Создан createdStatisticDto в статистике => {}", createdStatisticDto);
-        return createdStatisticDto;
+                                StatisticMapper.toEndpointHitEntity(statisticRequest)));
+        log.info("STATISTIC => Создан createdStatisticRequest в статистике => {}", createdStatisticRequest);
+        return createdStatisticRequest;
     }
 
     @Override

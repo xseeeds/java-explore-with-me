@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.defaultComponent.ewmService.dto.user.NewUserRequest;
-import ru.defaultComponent.ewmService.dto.user.UserDto;
+import ru.defaultComponent.ewmService.dto.user.CreateUserRequest;
+import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.user.model.UserEntity;
 import ru.practicum.user.mapper.UserMapper;
@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserAdminService {
     @Transactional
     @Modifying
     @Override
-    public UserDto createUser(NewUserRequest userRequest) {
-        final UserDto userDto = UserMapper
-                .toUserDto(
+    public UserResponseDto createUser(CreateUserRequest userRequest) {
+        final UserResponseDto userResponseDto = UserMapper
+                .toUserResponseDto(
                 userRepository.save(
-                        UserMapper.toUserEntityFromRequest(userRequest)));
-        log.info("ADMIN => Создан новый пользователь email => {}", userDto.getEmail());
-        return userDto;
+                        UserMapper.toUserEntity(userRequest)));
+        log.info("ADMIN => Создан новый пользователь email => {}", userResponseDto.getEmail());
+        return userResponseDto;
     }
 
     @Transactional
@@ -47,10 +47,10 @@ public class UserServiceImpl implements UserAdminService {
     }
 
     @Override
-    public List<UserDto> getUsers(List<Long> ids, int from, int size) {
-        final Page<UserDto> userDtoPage = userRepository
+    public List<UserResponseDto> getUsers(List<Long> ids, int from, int size) {
+        final Page<UserResponseDto> userDtoPage = userRepository
                 .findAllByAdmin(ids, getPageSortAscByProperties(from, size, "id"))
-                .map(UserMapper::toUserDto);
+                .map(UserMapper::toUserResponseDto);
         log.info("ADMIN => Пользователи получены size => {}", userDtoPage.getTotalElements());
         return userDtoPage.getContent();
     }

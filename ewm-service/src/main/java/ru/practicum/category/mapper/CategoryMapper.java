@@ -1,25 +1,26 @@
 package ru.practicum.category.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.category.CategoryDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryRequestDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.practicum.category.model.CategoryEntity;
 
 @UtilityClass
 public class CategoryMapper {
 
-    public CategoryDto toCategoryDto(CategoryEntity categoryEntity) {
-        return CategoryDto
+    public CategoryResponseDto toCategoryResponseDto(CategoryEntity categoryEntity) {
+        return CategoryResponseDto
                 .builder()
                 .id(categoryEntity.getId())
                 .name(categoryEntity.getName())
                 .build();
     }
 
-    public CategoryEntity toCategoryEntity(CategoryDto categoryDto) {
+    public CategoryEntity toCategoryEntity(CategoryRequestDto categoryRequestDto) {
         return CategoryEntity
                 .builder()
-                .id(categoryDto.getId())
-                .name(categoryDto.getName())
+                .id(categoryRequestDto.getId())
+                .name(categoryRequestDto.getName())
                 .build();
     }
 

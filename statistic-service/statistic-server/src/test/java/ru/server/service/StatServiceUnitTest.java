@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.model.EndpointHitEntity;
 import ru.server.dao.StatisticRepository;
 
@@ -29,10 +29,10 @@ class StatServiceUnitTest {
     @InjectMocks
     private StatisticServiceImpl statisticService;
 
-    private StatisticDto statisticDto;
+    private StatisticRequest statisticRequest;
     private EndpointHitEntity endpointHitEntity;
     private EndpointHitEntity endpointHitEntityWithId;
-    private ViewStatistic hitDto;
+    private ViewStatistic viewStatistic;
     private LocalDateTime now;
 
     @BeforeEach
@@ -47,7 +47,7 @@ class StatServiceUnitTest {
                 .createdOn(now)
                 .build();
 
-        statisticDto = StatisticDto
+        statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
                 .uri("/test")
@@ -64,10 +64,10 @@ class StatServiceUnitTest {
                 .createdOn(now)
                 .build();
 
-        hitDto = ViewStatistic
+        viewStatistic = ViewStatistic
                 .builder()
-                .app(statisticDto.getApp())
-                .uri(statisticDto.getUri())
+                .app(statisticRequest.getApp())
+                .uri(statisticRequest.getUri())
                 .hits(1L)
                 .build();
     }
@@ -78,7 +78,7 @@ class StatServiceUnitTest {
                 .save(any(EndpointHitEntity.class)))
                 .thenReturn(endpointHitEntityWithId);
 
-        statisticService.addStatistic(statisticDto);
+        statisticService.addStatistic(statisticRequest);
 
         verify(statisticRepository, times(1))
                 .save(endpointHitEntity);
@@ -95,9 +95,9 @@ class StatServiceUnitTest {
                         now.plusDays(1),
                         getPage(0, 10)))
                 .thenReturn(
-                        new PageImpl<>(List.of(hitDto)));
+                        new PageImpl<>(List.of(viewStatistic)));
 
-        expectedList = List.of(hitDto);
+        expectedList = List.of(viewStatistic);
         actualList = statisticService.getStatistics(
                 now.minusDays(1),
                 now.plusDays(1),

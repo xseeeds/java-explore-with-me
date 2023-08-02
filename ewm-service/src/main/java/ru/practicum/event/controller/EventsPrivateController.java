@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateResult;
-import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateRequest;
-import ru.defaultComponent.ewmService.dto.event.EventFullDto;
-import ru.defaultComponent.ewmService.dto.event.EventShortDto;
-import ru.defaultComponent.ewmService.dto.event.NewEventDto;
-import ru.defaultComponent.ewmService.dto.event.ParticipationRequestDto;
+import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.practicum.event.service.EventPrivateService;
-import ru.defaultComponent.ewmService.dto.request.UpdateEventUserRequest;
+import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -37,19 +34,19 @@ public class EventsPrivateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto addNewEvent(@Positive @PathVariable long userId,
-                                    @Valid @RequestBody NewEventDto newEventDto) {
+    public EventFullResponseDto addNewEvent(@Positive @PathVariable long userId,
+                                            @Valid @RequestBody CreateEventRequestDto createEventRequestDto) {
         log.info("EWM-SERVICE-private => Запрошено добавление нового события => {}, пользователем по id => {}",
-                newEventDto, userId);
-        return eventPrivateService.addNewEvent(userId, newEventDto);
+                createEventRequestDto, userId);
+        return eventPrivateService.addNewEvent(userId, createEventRequestDto);
     }
 
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getAllUserEvents(@Positive @PathVariable long userId,
-                                                @RequestParam(defaultValue = "0") int from,
-                                                @RequestParam(defaultValue = "10") int size) {
+    public List<EventShortResponseDto> getAllUserEvents(@Positive @PathVariable long userId,
+                                                        @RequestParam(defaultValue = "0") int from,
+                                                        @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-private => Запрошен список событий пользователя по id => {}, from => {}, size => {}",
                 userId, from, size);
         return eventPrivateService.getAllUserEvents(userId, from, size);
@@ -57,8 +54,8 @@ public class EventsPrivateController {
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventByUser(@Positive @PathVariable long userId,
-                                       @Positive @PathVariable long eventId) {
+    public EventFullResponseDto getEventByUser(@Positive @PathVariable long userId,
+                                               @Positive @PathVariable long eventId) {
         log.info("EWM-SERVICE-private => Запрошено получение события по id => {}, пользователем по id => {}",
                 eventId, userId);
         return eventPrivateService.getEventByUser(userId, eventId);
@@ -66,20 +63,20 @@ public class EventsPrivateController {
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEventByUser(@Positive @PathVariable long userId,
-                                          @Positive @PathVariable long eventId,
-                                          @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+    public EventFullResponseDto updateEventByUser(@Positive @PathVariable long userId,
+                                                  @Positive @PathVariable long eventId,
+                                                  @Valid @RequestBody UpdateEventUserRequestDto updateEventUserRequestDto) {
         log.info("EWM-SERVICE-private => Запрошено обновление события по id => {}, пользователем по id => {}",
                 eventId, userId);
-        return eventPrivateService.updateEventByUser(userId, eventId, updateEventUserRequest);
+        return eventPrivateService.updateEventByUser(userId, eventId, updateEventUserRequestDto);
     }
 
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getUserEventRequests(@Positive @PathVariable long userId,
-                                                              @Positive @PathVariable long eventId,
-                                                              @RequestParam(defaultValue = "0") int from,
-                                                              @RequestParam(defaultValue = "10") int size) {
+    public List<ParticipationResponseDto> getUserEventRequests(@Positive @PathVariable long userId,
+                                                               @Positive @PathVariable long eventId,
+                                                               @RequestParam(defaultValue = "0") int from,
+                                                               @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-private => Запрошено получение списка заявок на события по id => {}, " +
                 "пользователем по id => {}, from => {}, size => {}", eventId, userId, from, size);
         return eventPrivateService.getUserEventRequests(userId, eventId, from, size);
@@ -87,12 +84,12 @@ public class EventsPrivateController {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventRequestStatusUpdateResult changeRequestsStatus(@Positive @PathVariable long userId,
-                                                               @Positive @PathVariable long eventId,
-                                                               @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+    public EventResponseStatusUpdateDto changeRequestsStatus(@Positive @PathVariable long userId,
+                                                             @Positive @PathVariable long eventId,
+                                                             @RequestBody EventRequestStatusUpdateDto eventRequestStatusUpdateDto) {
         log.info("EWM-SERVICE-private => Запрошено изменение статуса события по id => {}, пользователем по id => {}, " +
-                "EventRequestStatusUpdateRequest => {}", eventId, userId, eventRequestStatusUpdateRequest);
-        return eventPrivateService.changeRequestsStatus(userId, eventId, eventRequestStatusUpdateRequest);
+                "EventRequestStatusUpdateDto => {}", eventId, userId, eventRequestStatusUpdateDto);
+        return eventPrivateService.changeRequestsStatus(userId, eventId, eventRequestStatusUpdateDto);
     }
 
 }

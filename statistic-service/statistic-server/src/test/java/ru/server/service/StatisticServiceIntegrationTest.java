@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.dao.StatisticRepository;
 
 import java.time.LocalDateTime;
@@ -23,14 +23,14 @@ class StatisticServiceIntegrationTest {
     private final StatisticService statisticService;
     private final StatisticRepository statisticRepository;
 
-    private StatisticDto statisticDto;
+    private StatisticRequest statisticRequest;
     private LocalDateTime now;
 
     @BeforeEach
     void setUp() {
         now = LocalDateTime.now();
 
-        statisticDto = StatisticDto
+        statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
                 .uri("/test")
@@ -44,7 +44,7 @@ class StatisticServiceIntegrationTest {
     void addAndGetStatisticTest() {
         final List<ViewStatistic> actualList;
 
-        statisticService.addStatistic(statisticDto);
+        statisticService.addStatistic(statisticRequest);
 
         final List<ViewStatistic> expectedList = statisticRepository
                 .findAllStatistics(

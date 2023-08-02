@@ -1,16 +1,16 @@
 package ru.practicum.compilation.service;
 
-import ru.defaultComponent.ewmService.dto.compilation.CompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationDto;
+import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
+import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationRequestDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.compilation.model.CompilationEntity;
 
 public interface CompilationAdminService {
 
-    CompilationDto addCompilation(CreateCompilationDto createCompilationDto);
+    CompilationResponseDto addCompilation(CreateCompilationRequestDto createCompilationRequestDto);
 
-    CompilationDto updateCompilation(long compilationId, UpdateCompilationDto updateCompilationDto) throws NotFoundException;
+    CompilationResponseDto updateCompilation(long compilationId, UpdateCompilationRequestDto updateCompilationRequestDto) throws NotFoundException;
 
     void deleteCompilation(long compilationId) throws NotFoundException;
 

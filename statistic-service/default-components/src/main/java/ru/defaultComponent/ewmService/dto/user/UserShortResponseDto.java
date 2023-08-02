@@ -1,25 +1,21 @@
-package ru.defaultComponent.ewmService.dto.event;
+package ru.defaultComponent.ewmService.dto.user;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LocationDto {
+public class UserShortResponseDto {
 
-    @NotNull
-    Double lat;
+    Long id;
 
-    @NotNull
-    Double lon;
+    String name;
 
 }

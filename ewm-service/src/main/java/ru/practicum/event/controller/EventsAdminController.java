@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.event.EventFullDto;
+import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
 import ru.practicum.event.service.EventAdminService;
-import ru.defaultComponent.ewmService.dto.request.UpdateEventAdminRequest;
+import ru.defaultComponent.ewmService.dto.event.UpdateEventAdminRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -32,13 +32,13 @@ public class EventsAdminController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventFullDto> getAllEvents(@RequestParam(required = false) List<Long> users,
-                                           @RequestParam(required = false) List<EventState> states,
-                                           @RequestParam(required = false) List<Long> categories,
-                                           @RequestParam(required = false) String rangeStart,
-                                           @RequestParam(required = false) String rangeEnd,
-                                           @RequestParam(defaultValue = "0") int from,
-                                           @RequestParam(defaultValue = "10") int size) {
+    public List<EventFullResponseDto> getAllEvents(@RequestParam(required = false) List<Long> users,
+                                                   @RequestParam(required = false) List<EventState> states,
+                                                   @RequestParam(required = false) List<Long> categories,
+                                                   @RequestParam(required = false) String rangeStart,
+                                                   @RequestParam(required = false) String rangeEnd,
+                                                   @RequestParam(defaultValue = "0") int from,
+                                                   @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-admin => Запрошен поиск событий => " +
                         "users => {}, states => {}, categories => {}, rangeStart => {}, rangeEnd => {}, from => {}, size => {}",
                 users, states, categories, rangeStart, rangeEnd, from, size);
@@ -47,10 +47,10 @@ public class EventsAdminController {
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEvent(@Positive @PathVariable long eventId,
-                                    @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
+    public EventFullResponseDto updateEvent(@Positive @PathVariable long eventId,
+                                            @Valid @RequestBody UpdateEventAdminRequestDto updateEventAdminRequestDto) {
         log.info("EWM-SERVICE-admin => Запрошен обновление событий по id => {}", eventId);
-        return eventAdminService.updateEvent(eventId, updateEventAdminRequest);
+        return eventAdminService.updateEvent(eventId, updateEventAdminRequestDto);
     }
 
 }

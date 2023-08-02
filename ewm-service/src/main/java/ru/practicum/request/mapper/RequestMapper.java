@@ -1,19 +1,19 @@
 package ru.practicum.request.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.event.ParticipationRequestDto;
-import ru.practicum.request.model.RequestEntity;
+import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
+import ru.practicum.request.model.ParticipationEntity;
 
 @UtilityClass
 public class RequestMapper {
 
-    public static ParticipationRequestDto toRequestDto(RequestEntity requestEntity) {
-        return ParticipationRequestDto.builder()
-                .id(requestEntity.getId())
-                .created(requestEntity.getCreatedOn())
-                .event(requestEntity.getEvent())
-                .requester(requestEntity.getRequester())
-                .status(requestEntity.getStatus())
+    public ParticipationResponseDto toParticipationResponseDto(ParticipationEntity participationEntity) {
+        return ParticipationResponseDto.builder()
+                .id(participationEntity.getId())
+                .created(participationEntity.getCreatedOn())
+                .event(participationEntity.getEvent())
+                .requester(participationEntity.getRequester())
+                .status(participationEntity.getStatus())
                 .build();
     }
 

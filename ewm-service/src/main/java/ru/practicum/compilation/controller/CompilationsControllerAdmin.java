@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.compilation.CompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationDto;
+import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
+import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationRequestDto;
 import ru.practicum.compilation.service.CompilationAdminService;
 
 import javax.validation.Valid;
@@ -31,17 +31,17 @@ public class CompilationsControllerAdmin {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto addCompilation(@Valid @RequestBody CreateCompilationDto createCompilationDto) {
-        log.info("EWM-SERVICE-admin => Запрошено добавление новой подборки => {}", createCompilationDto);
-        return compilationService.addCompilation(createCompilationDto);
+    public CompilationResponseDto addCompilation(@Valid @RequestBody CreateCompilationRequestDto createCompilationRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрошено добавление новой подборки => {}", createCompilationRequestDto);
+        return compilationService.addCompilation(createCompilationRequestDto);
     }
 
     @PatchMapping("/{compilationId}")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto updateCompilation(@Positive @PathVariable long compilationId,
-                                            @Valid @RequestBody UpdateCompilationDto updateCompilationDto) {
+    public CompilationResponseDto updateCompilation(@Positive @PathVariable long compilationId,
+                                                    @Valid @RequestBody UpdateCompilationRequestDto updateCompilationRequestDto) {
         log.info("EWM-SERVICE-admin => Запрошено обновление подборки id => {}", compilationId);
-        return compilationService.updateCompilation(compilationId, updateCompilationDto);
+        return compilationService.updateCompilation(compilationId, updateCompilationRequestDto);
     }
 
     @DeleteMapping("/{compilationId}")

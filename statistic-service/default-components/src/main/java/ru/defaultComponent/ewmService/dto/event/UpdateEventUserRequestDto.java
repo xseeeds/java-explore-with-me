@@ -7,9 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.dto.category.CategoryDto;
-import ru.defaultComponent.ewmService.dto.user.UserShortDto;
+import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
+import ru.defaultComponent.ewmService.enums.StateUserRequest;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
@@ -19,25 +20,30 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventShortDto {
+public class UpdateEventUserRequestDto {
 
-    Long id;
-
+    @Size(min = 20, max = 2000)
     String annotation;
 
-    CategoryDto category;
+    Long category;
 
-    Integer confirmedRequests;
+    @Size(min = 20, max = 7000)
+    String description;
 
-    @JsonFormat(pattern = PATTERN_DATE_TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime eventDate;
 
-    UserShortDto initiator;
+    LocationRequestDto location;
 
     Boolean paid;
 
-    String title;
+    Integer participantLimit;
 
-    Integer views;
+    Boolean requestModeration;
+
+    StateUserRequest stateAction;
+
+    @Size(min = 3, max = 120)
+    String title;
 
 }

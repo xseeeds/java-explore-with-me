@@ -21,7 +21,7 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StatisticDto {
+public class StatisticRequest {
 
     Long id;
 

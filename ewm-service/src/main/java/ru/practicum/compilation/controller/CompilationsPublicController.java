@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.compilation.CompilationDto;
+import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
 import ru.practicum.compilation.service.CompilationPublicService;
 
 import javax.validation.constraints.Positive;
@@ -23,15 +23,15 @@ public class CompilationsPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CompilationDto> getComplications(@RequestParam(required = false) Boolean pinned,
-                                                 @RequestParam(defaultValue = "0") int from,
-                                                 @RequestParam(defaultValue = "10") int size) {
+    public List<CompilationResponseDto> getComplications(@RequestParam(required = false) Boolean pinned,
+                                                         @RequestParam(defaultValue = "0") int from,
+                                                         @RequestParam(defaultValue = "10") int size) {
         return compilationPublicService.getCompilations(pinned, from, size);
     }
 
     @GetMapping("/{compilationId}")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto getComplicationById(@Positive @PathVariable long compilationId) {
+    public CompilationResponseDto getComplicationById(@Positive @PathVariable long compilationId) {
         return compilationPublicService.getCompilationById(compilationId);
     }
 

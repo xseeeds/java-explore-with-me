@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.event;
+package ru.defaultComponent.ewmService.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
@@ -18,11 +18,11 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ParticipationRequestDto {
+public class ParticipationResponseDto {
 
     Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
+    @JsonFormat(pattern = PATTERN_DATE_TIME)
     LocalDateTime created;
 
     Long event;

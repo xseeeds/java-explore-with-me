@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -15,9 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateCompilationDto {
+public class UpdateCompilationRequestDto {
 
-    List<Long> eventsIds;
+    @UniqueElements
+    List<Long> events;
 
     Boolean pinned = Boolean.FALSE;
 

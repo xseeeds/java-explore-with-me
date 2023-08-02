@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.request;
+package ru.defaultComponent.ewmService.dto.user;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,24 +6,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.validator.constraints.UniqueElements;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateCompilationRequest {
+public class CreateUserRequest {
 
-    @UniqueElements
-    List<Long> events;
+    Long id;
 
-    Boolean pinned;
+    @Email
+    @NotBlank
+    @Size(min = 6, max = 254)
+    String email;
 
-    @Size(min = 3, max = 50)
-    String title;
+    @NotBlank
+    @Size(min = 2, max = 250)
+    String name;
 
 }

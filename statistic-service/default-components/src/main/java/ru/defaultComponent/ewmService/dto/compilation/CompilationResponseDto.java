@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.dto.event.EventShortDto;
+import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompilationDto {
+public class CompilationResponseDto {
 
     Long id;
 
-    List<EventShortDto> events;
+    List<EventShortResponseDto> events;
 
     Boolean pinned;
 

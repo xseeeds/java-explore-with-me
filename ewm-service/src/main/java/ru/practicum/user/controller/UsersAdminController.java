@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.user.NewUserRequest;
-import ru.defaultComponent.ewmService.dto.user.UserDto;
+import ru.defaultComponent.ewmService.dto.user.CreateUserRequest;
+import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
 import ru.practicum.user.service.UserAdminService;
 
 import javax.validation.Valid;
@@ -32,9 +32,9 @@ public class UsersAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody @Valid NewUserRequest newUserRequest) {
-        log.info("EWM-SERVICE-admin => Запрос создание пользователя email => {}", newUserRequest.getEmail());
-        return userAdminService.createUser(newUserRequest);
+    public UserResponseDto createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        log.info("EWM-SERVICE-admin => Запрос создание пользователя email => {}", createUserRequest.getEmail());
+        return userAdminService.createUser(createUserRequest);
     }
 
     @DeleteMapping("/{userId}")
@@ -46,9 +46,9 @@ public class UsersAdminController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> userIds,
-                                  @RequestParam(defaultValue = "0") int from,
-                                  @RequestParam(defaultValue = "10") int size) {
+    public List<UserResponseDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> userIds,
+                                          @RequestParam(defaultValue = "0") int from,
+                                          @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-admin => Запрошено получение пользователей по userIds => {}, from => {}, size => {}",
                 userIds, from, size);
         return userAdminService.getUsers(userIds, from, size);

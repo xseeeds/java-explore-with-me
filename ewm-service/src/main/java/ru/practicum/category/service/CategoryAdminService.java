@@ -1,15 +1,16 @@
 package ru.practicum.category.service;
 
-import ru.defaultComponent.ewmService.dto.category.CategoryDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryRequestDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.category.model.CategoryEntity;
 
 public interface CategoryAdminService {
 
-    CategoryDto addCategory(CategoryDto categoryDto);
+    CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto);
 
-    CategoryDto updateCategory(long categoryId,
-                               CategoryDto categoryDto) throws NotFoundException;
+    CategoryResponseDto updateCategory(long categoryId,
+                                      CategoryRequestDto categoryRequestDto) throws NotFoundException;
 
     void deleteCategory(long categoryId) throws NotFoundException;
 

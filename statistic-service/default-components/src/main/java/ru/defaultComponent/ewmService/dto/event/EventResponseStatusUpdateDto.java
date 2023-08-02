@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventRequestStatusUpdateResult {
+public class EventResponseStatusUpdateDto {
 
-    List<ParticipationRequestDto> confirmedRequests;
+    List<ParticipationResponseDto> confirmedRequests;
 
-    List<ParticipationRequestDto> rejectedRequests;
+    List<ParticipationResponseDto> rejectedRequests;
 
 }

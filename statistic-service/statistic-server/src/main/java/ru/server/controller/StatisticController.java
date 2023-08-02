@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.dateTime.DefaultDateTimeFormatter;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
 
 import ru.server.service.StatisticService;
 
@@ -31,9 +31,9 @@ public class StatisticController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public StatisticDto addStatistic(@Valid @RequestBody StatisticDto statisticDto) {
-        log.info("STATISTIC-SERVER => Запрошено сохранение информации => {}", statisticDto);
-        return statisticService.addStatistic(statisticDto);
+    public StatisticRequest addStatistic(@Valid @RequestBody StatisticRequest statisticRequest) {
+        log.info("STATISTIC-SERVER => Запрошено сохранение информации => {}", statisticRequest);
+        return statisticService.addStatistic(statisticRequest);
     }
 
     @GetMapping("/stats")

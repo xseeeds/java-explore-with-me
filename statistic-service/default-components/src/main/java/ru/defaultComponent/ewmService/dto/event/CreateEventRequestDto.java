@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Data
@@ -18,7 +20,7 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewEventDto {
+public class CreateEventRequestDto {
 
     @NotNull
     @Size(min = 20, max = 2000)
@@ -32,11 +34,11 @@ public class NewEventDto {
     String description;
 
     @NotNull
-    LocationDto location;
+    LocationRequestDto location;
 
     @NotNull
-    @JsonFormat(pattern = PATTERN_DATE_TIME)
-    String eventDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
+    LocalDateTime eventDate;
 
     Boolean paid = Boolean.FALSE;
 

@@ -1,25 +1,25 @@
 package ru.practicum.user.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.user.NewUserRequest;
-import ru.defaultComponent.ewmService.dto.user.UserDto;
-import ru.defaultComponent.ewmService.dto.user.UserShortDto;
+import ru.defaultComponent.ewmService.dto.user.CreateUserRequest;
+import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
+import ru.defaultComponent.ewmService.dto.user.UserShortResponseDto;
 import ru.practicum.user.model.UserEntity;
 
 @UtilityClass
 public class UserMapper {
 
-    public UserEntity toUserEntityFromRequest(NewUserRequest newUserRequest) {
+    public UserEntity toUserEntity(CreateUserRequest createUserRequest) {
         return UserEntity
                 .builder()
-                .id(newUserRequest.getId())
-                .name(newUserRequest.getName())
-                .email(newUserRequest.getEmail())
+                .id(createUserRequest.getId())
+                .name(createUserRequest.getName())
+                .email(createUserRequest.getEmail())
                 .build();
     }
 
-    public UserDto toUserDto(UserEntity useEntity) {
-        return UserDto
+    public UserResponseDto toUserResponseDto(UserEntity useEntity) {
+        return UserResponseDto
                 .builder()
                 .id(useEntity.getId())
                 .name(useEntity.getName())
@@ -27,8 +27,8 @@ public class UserMapper {
                 .build();
     }
 
-    public UserShortDto toUserShortDto(UserEntity userEntity) {
-        return UserShortDto
+    public UserShortResponseDto toUserShortResponseDto(UserEntity userEntity) {
+        return UserShortResponseDto
                 .builder()
                 .id(userEntity.getId())
                 .name(userEntity.getName())

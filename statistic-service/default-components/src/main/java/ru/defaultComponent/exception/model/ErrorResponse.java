@@ -22,7 +22,7 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ErrorResponse {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
+    @JsonFormat(pattern = PATTERN_DATE_TIME)
     LocalDateTime timestamp;
 
     HttpStatus status;

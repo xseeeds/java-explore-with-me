@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
 import ru.server.service.StatisticService;
 
 import java.time.LocalDateTime;
@@ -40,13 +40,13 @@ class StatisticControllerTest {
     @MockBean
     private StatisticService statisticService;
 
-    private StatisticDto statisticDto;
-    private ViewStatistic hitDto;
+    private StatisticRequest statisticRequest;
+    private ViewStatistic viewStatistic;
 
     @Test
     @SneakyThrows
     void addStatisticTest() {
-        statisticDto = StatisticDto
+        statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
                 .uri("/test")
@@ -57,25 +57,25 @@ class StatisticControllerTest {
         mockMvc.perform(post("/hit")
                         .characterEncoding(UTF_8)
                         .contentType(APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(statisticDto)))
+                        .content(mapper.writeValueAsString(statisticRequest)))
                 .andExpect(
                         status().isCreated());
 
         verify(statisticService, times(1))
-                .addStatistic(statisticDto);
+                .addStatistic(statisticRequest);
     }
 
     @Test
     @SneakyThrows
     void getStatisticsTest() {
-        statisticDto = StatisticDto
+        statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
                 .uri("/test")
                 .ip("255.255.255.255")
                 .createdOn(LocalDateTime.now().truncatedTo(SECONDS))
                 .build();
-        hitDto = ViewStatistic
+        viewStatistic = ViewStatistic
                 .builder()
                 .app("test-app")
                 .uri("/test")
@@ -90,16 +90,16 @@ class StatisticControllerTest {
                         anyBoolean(),
                         anyInt(),
                         anyInt()))
-                .thenReturn(List.of(hitDto));
+                .thenReturn(List.of(viewStatistic));
 
         mockMvc.perform(get("/stats")
                         .param("start", "2020-05-05 12:12:12")
                         .param("end", "2035-05-05 12:12:12"))
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$[0].app").value(hitDto.getApp()),
-                        jsonPath("$[0].uri").value(hitDto.getUri()),
-                        jsonPath("$[0].hits").value(hitDto.getHits()));
+                        jsonPath("$[0].app").value(viewStatistic.getApp()),
+                        jsonPath("$[0].uri").value(viewStatistic.getUri()),
+                        jsonPath("$[0].hits").value(viewStatistic.getHits()));
     }
 
 }

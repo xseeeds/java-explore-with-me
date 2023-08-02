@@ -1,24 +1,24 @@
 package ru.server.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.model.EndpointHitEntity;
 
 @UtilityClass
 public class StatisticMapper {
 
-    public EndpointHitEntity toEndpointHitEntity(StatisticDto statisticDto) {
+    public EndpointHitEntity toEndpointHitEntity(StatisticRequest statisticRequest) {
         return EndpointHitEntity
                 .builder()
-                .app(statisticDto.getApp())
-                .uri(statisticDto.getUri())
-                .ip(statisticDto.getIp())
-                .createdOn(statisticDto.getCreatedOn())
+                .app(statisticRequest.getApp())
+                .uri(statisticRequest.getUri())
+                .ip(statisticRequest.getIp())
+                .createdOn(statisticRequest.getCreatedOn())
                 .build();
     }
 
-    public StatisticDto toStatisticDto(EndpointHitEntity endpointHitEntity) {
-        return StatisticDto
+    public StatisticRequest toStatisticRequest(EndpointHitEntity endpointHitEntity) {
+        return StatisticRequest
                 .builder()
                 .id(endpointHitEntity.getId())
                 .app(endpointHitEntity.getApp())

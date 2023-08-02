@@ -1,22 +1,20 @@
 package ru.practicum.compilation.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.compilation.CompilationDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationDto;
+import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
 import ru.practicum.compilation.model.CompilationEntity;
 import ru.practicum.event.mapper.EventMapper;
-import ru.practicum.event.model.EventEntity;
 
-import java.util.List;
-
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 
 @UtilityClass
 public class CompilationMapper {
 
-    public CompilationDto toComplicationDto(CompilationEntity compilationEntity) {
-        return CompilationDto
+    public CompilationResponseDto toCompilationResponseDto(CompilationEntity compilationEntity) {
+        return CompilationResponseDto
                 .builder()
                 .id(compilationEntity.getId())
                 .title(compilationEntity.getTitle())
@@ -24,18 +22,17 @@ public class CompilationMapper {
                 .events(compilationEntity
                         .getEvents()
                         .stream()
-                        .map(EventMapper::toEventShortDto)
+                        .map(EventMapper::toEventShortResponseDto)
                         .collect(toList()))
                 .build();
     }
 
-    public CompilationEntity toCompilationEntity(CreateCompilationDto createCompilationDto,
-                                                 List<EventEntity> eventEntityList) {
+    public CompilationEntity toCompilationEntity(CreateCompilationRequestDto createCompilationRequestDto) {
         return CompilationEntity
                 .builder()
-                .events(eventEntityList)
-                .pinned(createCompilationDto.getPinned())
-                .title(createCompilationDto.getTitle())
+                .events(emptyList())
+                .pinned(createCompilationRequestDto.getPinned())
+                .title(createCompilationRequestDto.getTitle())
                 .build();
     }
 

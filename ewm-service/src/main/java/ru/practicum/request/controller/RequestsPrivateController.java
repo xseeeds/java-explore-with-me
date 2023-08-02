@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.event.ParticipationRequestDto;
+import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.practicum.request.service.RequestPrivateService;
 
 import javax.validation.constraints.Positive;
@@ -29,9 +29,9 @@ public class RequestsPrivateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getUserRequests(@Positive @PathVariable long userId,
-                                                         @RequestParam(defaultValue = "0") int from,
-                                                         @RequestParam(defaultValue = "10") int size) {
+    public List<ParticipationResponseDto> getUserRequests(@Positive @PathVariable long userId,
+                                                          @RequestParam(defaultValue = "0") int from,
+                                                          @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-private => Запрошен список запросов на участие пользователем по id => {}, " +
                 "from => {}, size => {}", userId, from, size);
         return privateRequestService.getUserRequests(userId, from, size);
@@ -39,8 +39,8 @@ public class RequestsPrivateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto createRequest(@Positive @PathVariable long userId,
-                                                 @Positive @RequestParam long eventId) {
+    public ParticipationResponseDto createRequest(@Positive @PathVariable long userId,
+                                                  @Positive @RequestParam long eventId) {
         log.info("EWM-SERVICE-private => Запрошено создание запроса на участие в событии по id => {}, пользователем по id => {}",
                 eventId, userId);
         return privateRequestService.createRequest(userId, eventId);
@@ -48,8 +48,8 @@ public class RequestsPrivateController {
 
     @PatchMapping("/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
-    public ParticipationRequestDto cancelRequest(@Positive @PathVariable long userId,
-                                                 @Positive @PathVariable long requestId) {
+    public ParticipationResponseDto cancelRequest(@Positive @PathVariable long userId,
+                                                  @Positive @PathVariable long requestId) {
         log.info("EWM-SERVICE-private => Запрошено удаление запроса на участие по id => {}, пользователем по id => {}",
                 requestId, userId);
         return privateRequestService.cancelRequest(userId, requestId);

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,16 +38,16 @@ public class StatisticClient {
                 .build();
     }
 
-    public void save(StatisticDto statisticDto) {
-        final StatisticDto statisticDtoResponse = client
+    public void save(StatisticRequest statisticRequest) {
+        final StatisticRequest statisticRequestResponse = client
                 .post()
                 .uri("/hit")
-                .body(BodyInserters.fromValue(statisticDto))
+                .body(BodyInserters.fromValue(statisticRequest))
                 .retrieve()
-                .bodyToMono(StatisticDto.class)
+                .bodyToMono(StatisticRequest.class)
                 .block();
-        log.info("STATISTIC-CLIENT => Создан запрос сохранение статистики по посещениям StatisticDto => {}",
-                statisticDtoResponse);
+        log.info("STATISTIC-CLIENT => Создан запрос сохранение статистики по посещениям StatisticRequest => {}",
+                statisticRequestResponse);
     }
 
     public List<ViewStatistic> getStatistics(LocalDateTime start,

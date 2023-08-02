@@ -4,14 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.practicum.request.model.RequestEntity;
+import ru.practicum.request.model.ParticipationEntity;
 
 @Repository
-public interface RequestRepository extends JpaRepository<RequestEntity, Long> {
+public interface RequestRepository extends JpaRepository<ParticipationEntity, Long> {
 
-    Page<RequestEntity> findAllByEvent(long eventId, Pageable page);
+    Page<ParticipationEntity> findAllByEvent(long eventId, Pageable page);
 
-    Page<RequestEntity> findAllByRequester(long userId, Pageable page);
+    Page<ParticipationEntity> findAllByRequester(long userId, Pageable page);
 
     boolean existsByRequesterAndEvent(long userId, long eventId);
 

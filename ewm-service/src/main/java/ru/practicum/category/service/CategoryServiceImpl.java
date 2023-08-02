@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.defaultComponent.ewmService.dto.category.CategoryDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryRequestDto;
+import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.CategoryEntity;
@@ -27,27 +28,27 @@ public class CategoryServiceImpl implements CategoryAdminService, CategoryPublic
     @Transactional
     @Modifying
     @Override
-    public CategoryDto addCategory(CategoryDto categoryDto) {
-        final CategoryDto createdCategoryDto = CategoryMapper
-                .toCategoryDto(categoryRepository.save(
-                        CategoryMapper.toCategoryEntity(categoryDto)));
-        log.info("ADMIN => Добавлена новая категория => {}", createdCategoryDto);
-        return createdCategoryDto;
+    public CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto) {
+        final CategoryResponseDto categoryResponseDto = CategoryMapper
+                .toCategoryResponseDto(categoryRepository.save(
+                        CategoryMapper.toCategoryEntity(categoryRequestDto)));
+        log.info("ADMIN => Добавлена новая категория => {}", categoryResponseDto);
+        return categoryResponseDto;
     }
 
     @Transactional
     @Modifying
     @Override
-    public CategoryDto updateCategory(long categoryId, CategoryDto categoryDto) throws NotFoundException {
+    public CategoryResponseDto updateCategory(long categoryId, CategoryRequestDto categoryRequestDto) throws NotFoundException {
         final CategoryEntity categoryEntity = this
                 .findCategoryEntityById(categoryId);
         categoryEntity.setName(
-                categoryDto.getName());
-        final CategoryDto updatedCategoryDto = CategoryMapper
-                .toCategoryDto(
+                categoryRequestDto.getName());
+        final CategoryResponseDto categoryResponseDto = CategoryMapper
+                .toCategoryResponseDto(
                         categoryRepository.save(categoryEntity));
         log.info("ADMIN => Обновлена категория по id => {}", categoryId);
-        return updatedCategoryDto;
+        return categoryResponseDto;
     }
 
     @Transactional
@@ -76,20 +77,20 @@ public class CategoryServiceImpl implements CategoryAdminService, CategoryPublic
     }
 
     @Override
-    public List<CategoryDto> getCategories(int from, int size) {
-        final Page<CategoryDto> categoryDtoPage = categoryRepository
+    public List<CategoryResponseDto> getCategories(int from, int size) {
+        final Page<CategoryResponseDto> categoryResponseDtoPage = categoryRepository
                 .findAll(getPageSortAscByProperties(from, size, "id"))
-                .map(CategoryMapper::toCategoryDto);
-        log.info("PUBLIC => Список всех категорий size => {} получен", categoryDtoPage.getTotalElements());
-        return categoryDtoPage.getContent();
+                .map(CategoryMapper::toCategoryResponseDto);
+        log.info("PUBLIC => Список всех категорий size => {} получен", categoryResponseDtoPage.getTotalElements());
+        return categoryResponseDtoPage.getContent();
     }
 
     @Override
-    public CategoryDto getCategory(long categoryId) throws NotFoundException {
-        final CategoryDto categoryDto = CategoryMapper
-                .toCategoryDto(this.findCategoryEntityById(categoryId));
+    public CategoryResponseDto getCategory(long categoryId) throws NotFoundException {
+        final CategoryResponseDto categoryResponseDto = CategoryMapper
+                .toCategoryResponseDto(this.findCategoryEntityById(categoryId));
         log.info("PUBLIC => Категория по id => {} получена", categoryId);
-        return categoryDto;
+        return categoryResponseDto;
     }
 
 }

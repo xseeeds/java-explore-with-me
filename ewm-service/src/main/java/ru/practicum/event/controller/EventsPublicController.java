@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.client.StatisticClient;
-import ru.defaultComponent.ewmService.dto.event.EventFullDto;
-import ru.defaultComponent.ewmService.dto.event.EventShortDto;
-import ru.defaultComponent.statisticServer.dto.StatisticDto;
+import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
+import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.practicum.event.service.EventPublicService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,17 +33,17 @@ public class EventsPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getAllEvents(@RequestParam(required = false) String text,
-                                            @RequestParam(required = false) List<Long> categories,
-                                            @RequestParam(required = false) Boolean paid,
-                                            @RequestParam(required = false) String rangeStart,
-                                            @RequestParam(required = false) String rangeEnd,
-                                            @RequestParam(required = false) Boolean onlyAvailable,
-                                            @RequestParam(required = false) String sort,
-                                            @RequestParam(defaultValue = "0") int from,
-                                            @RequestParam(defaultValue = "10") int size,
-                                            HttpServletRequest httpServletRequest) {
-        statisticClient.save(toStatisticDto(httpServletRequest));
+    public List<EventShortResponseDto> getAllEvents(@RequestParam(required = false) String text,
+                                                    @RequestParam(required = false) List<Long> categories,
+                                                    @RequestParam(required = false) Boolean paid,
+                                                    @RequestParam(required = false) String rangeStart,
+                                                    @RequestParam(required = false) String rangeEnd,
+                                                    @RequestParam(required = false) Boolean onlyAvailable,
+                                                    @RequestParam(required = false) String sort,
+                                                    @RequestParam(defaultValue = "0") int from,
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    HttpServletRequest httpServletRequest) {
+        statisticClient.save(toStatisticRequest(httpServletRequest));
         log.info("EWM-SERVICE-public => Запрошен поиск событий => " +
                         "text => {}, categories => {}, paid => {}, rangeStart => {}, rangeEnd => {}, " +
                         "onlyAvailable => {}, sort => {}, from => {}, size => {}",
@@ -53,15 +53,15 @@ public class EventsPublicController {
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@Positive @PathVariable long eventId,
-                                     HttpServletRequest httpServletRequest) {
-        statisticClient.save(toStatisticDto(httpServletRequest));
+    public EventFullResponseDto getEventById(@Positive @PathVariable long eventId,
+                                             HttpServletRequest httpServletRequest) {
+        statisticClient.save(toStatisticRequest(httpServletRequest));
         log.info("EWM-SERVICE-public => Запрошено событие по id => {}", eventId);
         return eventPublicService.getEventById(eventId);
     }
 
-    private StatisticDto toStatisticDto(HttpServletRequest httpServletRequest) {
-        return StatisticDto
+    private StatisticRequest toStatisticRequest(HttpServletRequest httpServletRequest) {
+        return StatisticRequest
                 .builder()
                 .app(httpServletRequest.getServerName())
                 .uri(httpServletRequest.getRequestURI())

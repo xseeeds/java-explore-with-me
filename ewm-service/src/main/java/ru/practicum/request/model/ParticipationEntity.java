@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "requests")
-public class RequestEntity {
+public class ParticipationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
