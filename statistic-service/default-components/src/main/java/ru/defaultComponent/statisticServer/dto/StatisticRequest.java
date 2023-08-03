@@ -15,6 +15,7 @@ import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Data
@@ -32,7 +33,8 @@ public class StatisticRequest {
     @NotBlank
     String uri;
 
-    List<Long> eventsIds;
+    @Builder.Default
+    List<Long> eventsIds = emptyList();
 
     @NotBlank
     String ip;

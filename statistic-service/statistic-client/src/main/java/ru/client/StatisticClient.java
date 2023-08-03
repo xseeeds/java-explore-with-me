@@ -39,7 +39,7 @@ public class StatisticClient {
     }
 
     public void save(StatisticRequest statisticRequest) {
-        client
+        final List<StatisticRequest> statisticRequestList = client
                 .post()
                 .uri("/hit")
                 .body(BodyInserters.fromValue(statisticRequest))
@@ -48,10 +48,11 @@ public class StatisticClient {
                         error -> Mono.error(new RuntimeException("API not found")))
                 .onStatus(HttpStatus::is5xxServerError,
                         error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToMono(Void.class)
+                .bodyToFlux(StatisticRequest.class)
+                .collectList()
                 .block();
-        log.info("STATISTIC-CLIENT => Создан запрос сохранение статистики по посещениям StatisticRequest => {}",
-                statisticRequest);
+        log.info("STATISTIC-CLIENT => Создан запрос сохранение статистики по посещениям statisticRequestList => {}",
+                statisticRequestList);
     }
 
     public List<ViewStatistic> getStatistics(LocalDateTime start,

@@ -6,6 +6,7 @@ import ru.server.model.EndpointHitEntity;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @UtilityClass
@@ -27,11 +28,38 @@ public class StatisticMapper {
                 .stream()
                 .map(eventId -> EndpointHitEntity
                         .builder()
-                        .id(statisticRequest.getId())
                         .app(statisticRequest.getApp())
                         .uri(statisticRequest.getUri() + "/" + eventId)
                         .ip(statisticRequest.getIp())
                         .createdOn(statisticRequest.getCreatedOn())
+                        .build())
+                .collect(toList());
+    }
+
+    public List<StatisticRequest> toStatisticRequestList(EndpointHitEntity endpointHitEntity) {
+        return List.of(
+                StatisticRequest
+                        .builder()
+                        .id(endpointHitEntity.getId())
+                        .app(endpointHitEntity.getApp())
+                        .uri(endpointHitEntity.getUri())
+                        .eventsIds(emptyList())
+                        .ip(endpointHitEntity.getIp())
+                        .createdOn(endpointHitEntity.getCreatedOn())
+                        .build());
+    }
+
+    public List<StatisticRequest> toStatisticRequestList(List<EndpointHitEntity> endpointHitEntity, List<Long> eventsIds) {
+        return endpointHitEntity
+                .stream()
+                .map(endpointHit -> StatisticRequest
+                        .builder()
+                        .id(endpointHit.getId())
+                        .app(endpointHit.getApp())
+                        .uri(endpointHit.getUri())
+                        .eventsIds(eventsIds)
+                        .ip(endpointHit.getIp())
+                        .createdOn(endpointHit.getCreatedOn())
                         .build())
                 .collect(toList());
     }

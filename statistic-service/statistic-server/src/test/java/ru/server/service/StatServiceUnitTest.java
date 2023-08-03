@@ -15,6 +15,7 @@ import ru.server.dao.StatisticRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
@@ -27,8 +28,8 @@ import static ru.defaultComponent.pageRequest.UtilPage.getPage;
 class StatServiceUnitTest {
     @Mock
     private StatisticRepository statisticRepository;
-    @InjectMocks
-    private StatisticServiceImpl statisticService;
+    @InjectMocks//Inject for only Impl
+    private StatisticServiceImpl statisticServiceImpl;
 
     private StatisticRequest statisticRequest;
     private EndpointHitEntity endpointHitEntity;
@@ -52,7 +53,7 @@ class StatServiceUnitTest {
                 .builder()
                 .app("test-app")
                 .uri("/test")
-                .eventsIds(List.of())
+                .eventsIds(emptyList())
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -80,7 +81,7 @@ class StatServiceUnitTest {
                 .save(any(EndpointHitEntity.class)))
                 .thenReturn(endpointHitEntityWithId);
 
-        statisticService.addStatistic(statisticRequest);
+        statisticServiceImpl.addStatistic(statisticRequest);
 
         verify(statisticRepository, times(1))
                 .save(endpointHitEntity);
@@ -96,7 +97,7 @@ class StatServiceUnitTest {
                 .saveAll(anyList()))
                 .thenReturn(List.of(endpointHitEntityWithId));
 
-        statisticService.addStatistic(statisticRequest);
+        statisticServiceImpl.addStatistic(statisticRequest);
 
         verify(statisticRepository, times(1))
                 .saveAll(List.of(endpointHitEntity));
@@ -116,10 +117,10 @@ class StatServiceUnitTest {
                         new PageImpl<>(List.of(viewStatistic)));
 
         expectedList = List.of(viewStatistic);
-        actualList = statisticService.getStatistics(
+        actualList = statisticServiceImpl.getStatistics(
                 now.minusDays(1),
                 now.plusDays(1),
-                List.of(),
+                emptyList(),
                 false,
                 0,
                 10);

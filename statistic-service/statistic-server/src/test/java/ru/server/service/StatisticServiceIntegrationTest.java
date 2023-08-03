@@ -46,13 +46,31 @@ class StatisticServiceIntegrationTest {
         statisticService.addStatistic(statisticRequest);
 
         final List<ViewStatistic> expectedList = statisticRepository
-                .findAllStatistics(
+                .findStatisticByUris(
                         now.minusDays(1),
                         now.plusDays(1),
+                        List.of("/test/1", "/test/2"),
+                        getPage(0, 10))
+                .getContent();
+
+        final List<ViewStatistic> expectedList2 = statisticRepository
+                .findStatisticForUniqueIp(
+                        now.minusDays(1),
+                        now.plusDays(1),
+                        List.of("/test/1", "/test/2"),
                         getPage(0, 10))
                 .getContent();
 
         final List<ViewStatistic> actualList = statisticService
+                .getStatistics(
+                        now.minusDays(1),
+                        now.plusDays(1),
+                        List.of("/test/1", "/test/2"),
+                        false,
+                        0,
+                        10);
+
+        final List<ViewStatistic> actualList2 = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
@@ -62,5 +80,6 @@ class StatisticServiceIntegrationTest {
                         10);
 
         assertEquals(expectedList, actualList);
+        assertEquals(expectedList2, actualList2);
     }
 }

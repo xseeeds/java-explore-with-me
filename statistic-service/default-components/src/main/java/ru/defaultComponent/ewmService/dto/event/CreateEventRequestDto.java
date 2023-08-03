@@ -40,10 +40,12 @@ public class CreateEventRequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime eventDate;
 
+    @Builder.Default
     Boolean paid = Boolean.FALSE;
 
     Integer participantLimit = 0;
 
+    @Builder.Default
     Boolean requestModeration = Boolean.TRUE;
 
     @NotNull

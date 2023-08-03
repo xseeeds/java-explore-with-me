@@ -284,6 +284,8 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         return eventResponseStatusUpdateDto;
     }
 
+    @Transactional
+    @Modifying
     @Override
     public List<EventShortResponseDto> getAllEvents(String text, List<Long> categories, Boolean paid,
                                                     String rangeStart, String rangeEnd, Boolean onlyAvailable,
@@ -321,6 +323,8 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     //TODO потренироваться с QUERYDSL
     //TODO воспользоваться eventEntity.setViews(eventEntity.getViews() + 1); => statisticClient.getStatistics()
 
+    @Transactional
+    @Modifying
     @Override
     public EventFullResponseDto getEventById(long eventId, HttpServletRequest httpServletRequest) throws NotFoundException {
         final EventEntity eventEntity = this.findEventEntityById(eventId);
@@ -331,7 +335,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(
                         eventRepository.save(eventEntity));
-        statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, List.of()));
+        statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, emptyList()));
         log.info("PUBLIC => Событие по id => {} получено", eventId);
         return eventFullResponseDto;
     }

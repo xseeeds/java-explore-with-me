@@ -17,6 +17,7 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.temporal.ChronoUnit.SECONDS;
+import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -50,6 +51,7 @@ class StatisticControllerTest {
                 .builder()
                 .app("test-app")
                 .uri("/test")
+                .eventsIds(emptyList())
                 .ip("255.255.255.255")
                 .createdOn(LocalDateTime.now().truncatedTo(SECONDS))
                 .build();
@@ -68,13 +70,6 @@ class StatisticControllerTest {
     @Test
     @SneakyThrows
     void getStatisticsTest() {
-        statisticRequest = StatisticRequest
-                .builder()
-                .app("test-app")
-                .uri("/test")
-                .ip("255.255.255.255")
-                .createdOn(LocalDateTime.now().truncatedTo(SECONDS))
-                .build();
         viewStatistic = ViewStatistic
                 .builder()
                 .app("test-app")

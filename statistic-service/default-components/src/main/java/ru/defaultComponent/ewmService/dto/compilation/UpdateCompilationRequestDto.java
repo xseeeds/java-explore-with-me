@@ -21,6 +21,7 @@ public class UpdateCompilationRequestDto {
     @UniqueElements
     List<Long> events;
 
+    @Builder.Default
     Boolean pinned = Boolean.FALSE;
 
     @Size(min = 3, max = 50)

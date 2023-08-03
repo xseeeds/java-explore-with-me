@@ -11,7 +11,6 @@ import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.server.mapper.StatisticMapper;
 import ru.server.dao.StatisticRepository;
-import ru.server.model.EndpointHitEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,16 +29,22 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     @Transactional
     @Modifying
-    public void addStatistic(StatisticRequest statisticRequest) {
+    public List<StatisticRequest> addStatistic(StatisticRequest statisticRequest) {
+        final List<StatisticRequest> statisticRequestList;
         if (statisticRequest.getEventsIds().isEmpty()) {
-            final EndpointHitEntity endpointHitEntity = statisticRepository.save(
-                    StatisticMapper.toEndpointHitEntity(statisticRequest));
-            log.info("STATISTIC => Создан endpointHitEntity в статистике => {}", endpointHitEntity);
+            statisticRequestList = StatisticMapper
+                    .toStatisticRequestList(
+                            statisticRepository.save(
+                                    StatisticMapper.toEndpointHitEntity(statisticRequest)));
         } else {
-            final List<EndpointHitEntity> endpointHitEntityList = statisticRepository.saveAll(
-                    StatisticMapper.toEndpointHitEntityList(statisticRequest));
-            log.info("STATISTIC => Создан endpointHitEntityList в статистике => {}", endpointHitEntityList);
+            statisticRequestList = StatisticMapper
+                    .toStatisticRequestList(
+                            statisticRepository.saveAll(
+                                    StatisticMapper.toEndpointHitEntityList(statisticRequest)),
+                            statisticRequest.getEventsIds());
         }
+        log.info("STATISTIC => Создан statisticRequestList в статистике => {}", statisticRequestList);
+        return statisticRequestList;
     }
 
     @Override
@@ -50,22 +55,22 @@ public class StatisticServiceImpl implements StatisticService {
                                              int from,
                                              int size) throws BadRequestException {
         checkStartIsAfterEndPublic(start, end);
-        final Page<ViewStatistic> hitDtoPage;
+        final Page<ViewStatistic> viewStatisticPage;
         if (uris.isEmpty()) {
             if (!unique) {
-                hitDtoPage = statisticRepository.findAllStatistics(start, end, getPage(from, size));
+                viewStatisticPage = statisticRepository.findAllStatistics(start, end, getPage(from, size));
             } else {
-                hitDtoPage = statisticRepository.findAllStatisticsForUniqueIp(start, end, getPage(from, size));
+                viewStatisticPage = statisticRepository.findAllStatisticsForUniqueIp(start, end, getPage(from, size));
             }
         } else {
             if (!unique) {
-                hitDtoPage = statisticRepository.findStatisticByUris(start, end, uris, getPage(from, size));
+                viewStatisticPage = statisticRepository.findStatisticByUris(start, end, uris, getPage(from, size));
             } else {
-                hitDtoPage = statisticRepository.findStatisticForUniqueIp(start, end, uris, getPage(from, size));
+                viewStatisticPage = statisticRepository.findStatisticForUniqueIp(start, end, uris, getPage(from, size));
             }
         }
-        log.info("STATISTIC => Получен hitDtoPage size => {}", hitDtoPage.getTotalElements());
-        return hitDtoPage.getContent();
+        log.info("STATISTIC => Получен viewStatisticPage size => {}", viewStatisticPage.getTotalElements());
+        return viewStatisticPage.getContent();
     }
 
 }
