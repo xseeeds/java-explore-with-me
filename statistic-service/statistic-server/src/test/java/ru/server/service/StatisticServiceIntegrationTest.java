@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.defaultComponent.pageRequest.UtilPage.getPage;
 
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -49,35 +48,29 @@ class StatisticServiceIntegrationTest {
                 .findStatisticByUris(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"),
-                        getPage(0, 10))
-                .getContent();
+                        List.of("/test/1", "/test/2"));
 
         final List<ViewStatistic> expectedList2 = statisticRepository
                 .findStatisticForUniqueIp(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"),
-                        getPage(0, 10))
-                .getContent();
+                        List.of("/test/1", "/test/2"));
 
         final List<ViewStatistic> actualList = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
                         List.of("/test/1", "/test/2"),
-                        false,
-                        0,
-                        10);
+                        false
+                );
 
         final List<ViewStatistic> actualList2 = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
                         List.of("/test/1", "/test/2"),
-                        true,
-                        0,
-                        10);
+                        true
+                );
 
         assertEquals(expectedList, actualList);
         assertEquals(expectedList2, actualList2);

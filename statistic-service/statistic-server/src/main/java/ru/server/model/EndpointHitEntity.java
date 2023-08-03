@@ -34,6 +34,9 @@ public class EndpointHitEntity {
     @Column(length = 50, nullable = false)
     String uri;
 
+    @Column(name = "event_id")
+    Long eventId;
+
     @Column(length = 20, nullable = false)
     String ip;
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.dateTime.DefaultDateTimeFormatter;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 
@@ -20,6 +19,8 @@ import ru.server.service.StatisticService;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Slf4j
 @Validated
@@ -37,15 +38,13 @@ public class StatisticController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatistic> getStatistics(@RequestParam @DateTimeFormat(pattern = DefaultDateTimeFormatter.PATTERN_DATE_TIME) LocalDateTime start,
-                                             @RequestParam @DateTimeFormat(pattern = DefaultDateTimeFormatter.PATTERN_DATE_TIME) LocalDateTime end,
+    public List<ViewStatistic> getStatistics(@RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime start,
+                                             @RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime end,
                                              @RequestParam(defaultValue = "") List<String> uris,
-                                             @RequestParam(defaultValue = "false") boolean unique,
-                                             @RequestParam(value = "from", defaultValue = "0") int from,
-                                             @RequestParam(value = "size", defaultValue = "10") int size) {
-        log.info("STATISTIC-SERVER => Запрошена статистика по посещениям с => {} по => {}, uris => {}, unique => {}, from => {}, size => {}",
-                start, end, uris, unique, from, size);
-        return statisticService.getStatistics(start, end, uris, unique, from, size);
+                                             @RequestParam(defaultValue = "false") boolean unique) {
+        log.info("STATISTIC-SERVER => Запрошена статистика по посещениям с => {} по => {}, uris => {}, unique => {}",
+                start, end, uris, unique);
+        return statisticService.getStatistics(start, end, uris, unique);
     }
 
 }

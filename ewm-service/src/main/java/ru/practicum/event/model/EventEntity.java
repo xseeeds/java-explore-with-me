@@ -55,7 +55,7 @@ public class EventEntity {
     Long category;
 
     @Column(name = "confirmed_requests")
-    Integer confirmedRequests;
+    Long confirmedRequests;
 
     @Column(name = "created_date", nullable = false)
     LocalDateTime createdOn;
@@ -84,7 +84,7 @@ public class EventEntity {
     Boolean paid;
 
     @Column(name = "participant_limit")
-    Integer participantLimit;
+    Long participantLimit;
 
     @Column(name = "published_on")
     LocalDateTime publishedOn;
@@ -99,7 +99,7 @@ public class EventEntity {
     @Column(length = 128)
     String title;
 
-    Integer views;
+    Long views;
 
 }
 

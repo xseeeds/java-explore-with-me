@@ -1,7 +1,5 @@
 package ru.server.dao;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,32 +12,32 @@ import java.util.List;
 @Repository
 public interface StatisticRepository extends JpaRepository<EndpointHitEntity, Long> {
 
-    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT((eh.ip))) " +
+    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
             "WHERE eh.createdOn BETWEEN ?1 AND ?2 AND eh.uri IN ?3 " +
-            "GROUP BY eh.app, eh.uri " +
+            "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.ip) DESC")
-    Page<ViewStatistic> findStatisticByUris(LocalDateTime start, LocalDateTime end, List<String> uris, Pageable page);
+    List<ViewStatistic> findStatisticByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT((eh.ip))) " +
+    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
             "WHERE eh.createdOn BETWEEN ?1 AND ?2 " +
-            "GROUP BY eh.app, eh.uri " +
+            "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.id) DESC")
-    Page<ViewStatistic> findAllStatistics(LocalDateTime start, LocalDateTime end, Pageable page);
+    List<ViewStatistic> findAllStatistics(LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT(DISTINCT(eh.ip))) " +
+    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT(DISTINCT(eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
             "WHERE eh.createdOn BETWEEN ?1 AND ?2 AND eh.uri IN ?3 " +
-            "GROUP BY eh.app, eh.uri " +
+            "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.id) DESC")
-    Page<ViewStatistic> findStatisticForUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris, Pageable page);
+    List<ViewStatistic> findStatisticForUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT(DISTINCT(eh.ip))) " +
+    @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT(DISTINCT(eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
             "WHERE eh.createdOn BETWEEN ?1 AND ?2 " +
-            "GROUP BY eh.app, eh.uri " +
+            "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.ip) DESC")
-    Page<ViewStatistic> findAllStatisticsForUniqueIp(LocalDateTime start, LocalDateTime end, Pageable page);
+    List<ViewStatistic> findAllStatisticsForUniqueIp(LocalDateTime start, LocalDateTime end);
 
 }

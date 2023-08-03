@@ -18,6 +18,8 @@ public class ViewStatistic {
 
     String uri;
 
+    Long eventId;
+
     Long hits;
 
 }

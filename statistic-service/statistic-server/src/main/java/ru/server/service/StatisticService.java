@@ -14,8 +14,6 @@ public interface StatisticService {
     List<ViewStatistic> getStatistics(LocalDateTime start,
                                       LocalDateTime end,
                                       List<String> uris,
-                                      boolean unique,
-                                      int from,
-                                      int size) throws BadRequestException;
+                                      boolean unique) throws BadRequestException;
 
 }

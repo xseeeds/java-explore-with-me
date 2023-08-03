@@ -21,7 +21,6 @@ import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -82,9 +81,8 @@ class StatisticControllerTest {
                         any(LocalDateTime.class),
                         any(LocalDateTime.class),
                         anyList(),
-                        anyBoolean(),
-                        anyInt(),
-                        anyInt()))
+                        anyBoolean()
+                ))
                 .thenReturn(List.of(viewStatistic));
 
         mockMvc.perform(get("/stats")

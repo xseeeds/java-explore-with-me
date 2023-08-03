@@ -43,7 +43,8 @@ public class CreateEventRequestDto {
     @Builder.Default
     Boolean paid = Boolean.FALSE;
 
-    Integer participantLimit = 0;
+    @Builder.Default
+    Long participantLimit = 0L;
 
     @Builder.Default
     Boolean requestModeration = Boolean.TRUE;

@@ -2,7 +2,6 @@ package ru.server.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import ru.server.dao.StatisticRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.defaultComponent.pageRequest.UtilPage.getPage;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndPublic;
 
 @Service
@@ -51,26 +49,26 @@ public class StatisticServiceImpl implements StatisticService {
     public List<ViewStatistic> getStatistics(LocalDateTime start,
                                              LocalDateTime end,
                                              List<String> uris,
-                                             boolean unique,
-                                             int from,
-                                             int size) throws BadRequestException {
+                                             boolean unique) throws BadRequestException {
         checkStartIsAfterEndPublic(start, end);
-        final Page<ViewStatistic> viewStatisticPage;
+        final List<ViewStatistic> viewStatisticList;
         if (uris.isEmpty()) {
             if (!unique) {
-                viewStatisticPage = statisticRepository.findAllStatistics(start, end, getPage(from, size));
+                viewStatisticList = statisticRepository.findAllStatistics(start, end);
             } else {
-                viewStatisticPage = statisticRepository.findAllStatisticsForUniqueIp(start, end, getPage(from, size));
+                viewStatisticList = statisticRepository.findAllStatisticsForUniqueIp(start, end);
             }
         } else {
             if (!unique) {
-                viewStatisticPage = statisticRepository.findStatisticByUris(start, end, uris, getPage(from, size));
+                viewStatisticList = statisticRepository.findStatisticByUris(start, end, uris);
             } else {
-                viewStatisticPage = statisticRepository.findStatisticForUniqueIp(start, end, uris, getPage(from, size));
+                viewStatisticList = statisticRepository.findStatisticForUniqueIp(start, end, uris);
             }
         }
-        log.info("STATISTIC => Получен viewStatisticPage size => {}", viewStatisticPage.getTotalElements());
-        return viewStatisticPage.getContent();
+        log.info("STATISTIC => Получен viewStatisticList size => {}", viewStatisticList.size());
+        return viewStatisticList;
     }
+
+    //TODO !QUERYDSL
 
 }

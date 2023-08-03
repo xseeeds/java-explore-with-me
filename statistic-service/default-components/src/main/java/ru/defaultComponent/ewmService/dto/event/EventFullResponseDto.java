@@ -28,7 +28,7 @@ public class EventFullResponseDto {
 
     CategoryResponseDto category;
 
-    Integer confirmedRequests;
+    Long confirmedRequests;
 
     @JsonFormat(pattern = PATTERN_DATE_TIME)
     LocalDateTime createdOn;
@@ -44,7 +44,7 @@ public class EventFullResponseDto {
 
     Boolean paid;
 
-    Integer participantLimit;
+    Long participantLimit;
 
     @JsonFormat(pattern = PATTERN_DATE_TIME)
     LocalDateTime publishedOn;
@@ -55,6 +55,6 @@ public class EventFullResponseDto {
 
     String title;
 
-    Integer views;
+    Long views;
 
 }

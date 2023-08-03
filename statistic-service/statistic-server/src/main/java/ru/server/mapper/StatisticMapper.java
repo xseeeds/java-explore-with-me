@@ -17,6 +17,8 @@ public class StatisticMapper {
                 .builder()
                 .app(statisticRequest.getApp())
                 .uri(statisticRequest.getUri())
+                .eventId(Long.parseLong(statisticRequest.getUri()
+                        .substring(statisticRequest.getUri().lastIndexOf("/") + 1)))
                 .ip(statisticRequest.getIp())
                 .createdOn(statisticRequest.getCreatedOn())
                 .build();
@@ -30,6 +32,7 @@ public class StatisticMapper {
                         .builder()
                         .app(statisticRequest.getApp())
                         .uri(statisticRequest.getUri() + "/" + eventId)
+                        .eventId(eventId)
                         .ip(statisticRequest.getIp())
                         .createdOn(statisticRequest.getCreatedOn())
                         .build())

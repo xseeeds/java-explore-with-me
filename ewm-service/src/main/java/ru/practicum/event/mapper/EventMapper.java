@@ -24,7 +24,6 @@ public class EventMapper {
                 .annotation(createEventRequestDto.getAnnotation())
                 .categoryEntity(categoryEntity)
                 .category(categoryEntity.getId())
-                .confirmedRequests(0)
                 .createdOn(LocalDateTime.now())
                 .description(createEventRequestDto.getDescription())
                 .eventDate(createEventRequestDto.getEventDate())
@@ -37,7 +36,6 @@ public class EventMapper {
                 .requestModeration(createEventRequestDto.getRequestModeration())
                 .state(EventState.PENDING)
                 .title(createEventRequestDto.getTitle())
-                .views(0)
                 .build();
     }
 

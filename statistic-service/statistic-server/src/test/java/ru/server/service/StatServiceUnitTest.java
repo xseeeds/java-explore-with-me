@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.model.EndpointHitEntity;
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.defaultComponent.pageRequest.UtilPage.getPage;
 
 @ExtendWith(MockitoExtension.class)
 class StatServiceUnitTest {
@@ -44,7 +42,8 @@ class StatServiceUnitTest {
         endpointHitEntity = EndpointHitEntity
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/test/1")
+                .eventId(1L)
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -52,7 +51,7 @@ class StatServiceUnitTest {
         statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/test/1")
                 .eventsIds(emptyList())
                 .ip("255.255.255.255")
                 .createdOn(now)
@@ -62,7 +61,8 @@ class StatServiceUnitTest {
                 .builder()
                 .id(1L)
                 .app("test-app")
-                .uri("/test")
+                .uri("/test/1")
+                .eventId(1L)
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -71,6 +71,7 @@ class StatServiceUnitTest {
                 .builder()
                 .app(statisticRequest.getApp())
                 .uri(statisticRequest.getUri())
+                .eventId(1L)
                 .hits(1L)
                 .build();
     }
@@ -89,8 +90,7 @@ class StatServiceUnitTest {
 
     @Test
     void addStatisticSaveAllTest() {
-        endpointHitEntityWithId.setUri("/test/1");
-        endpointHitEntity.setUri("/test/1");
+        statisticRequest.setUri("/test");
         statisticRequest.setEventsIds(List.of(1L));
 
         when(statisticRepository
@@ -111,19 +111,16 @@ class StatServiceUnitTest {
         when(statisticRepository
                 .findAllStatistics(
                         now.minusDays(1),
-                        now.plusDays(1),
-                        getPage(0, 10)))
-                .thenReturn(
-                        new PageImpl<>(List.of(viewStatistic)));
+                        now.plusDays(1)))
+                .thenReturn(List.of(viewStatistic));
 
         expectedList = List.of(viewStatistic);
         actualList = statisticServiceImpl.getStatistics(
                 now.minusDays(1),
                 now.plusDays(1),
                 emptyList(),
-                false,
-                0,
-                10);
+                false
+        );
 
         assertEquals(expectedList, actualList);
     }

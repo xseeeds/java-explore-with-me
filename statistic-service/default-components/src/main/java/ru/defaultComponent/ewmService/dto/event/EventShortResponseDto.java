@@ -27,7 +27,7 @@ public class EventShortResponseDto {
 
     CategoryResponseDto category;
 
-    Integer confirmedRequests;
+    Long confirmedRequests;
 
     @JsonFormat(pattern = PATTERN_DATE_TIME)
     LocalDateTime eventDate;
@@ -38,6 +38,6 @@ public class EventShortResponseDto {
 
     String title;
 
-    Integer views;
+    Long views;
 
 }
