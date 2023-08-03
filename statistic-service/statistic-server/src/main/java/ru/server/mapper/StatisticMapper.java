@@ -36,16 +36,4 @@ public class StatisticMapper {
                 .collect(toList());
     }
 
-    public StatisticRequest toStatisticRequest(EndpointHitEntity endpointHitEntity, List<Long> eventIds) {
-        return StatisticRequest
-                .builder()
-                .id(endpointHitEntity.getId())
-                .app(endpointHitEntity.getApp())
-                .uri(endpointHitEntity.getUri())
-                .eventsIds(eventIds)
-                .ip(endpointHitEntity.getIp())
-                .createdOn(endpointHitEntity.getCreatedOn())
-                .build();
-    }
-
 }

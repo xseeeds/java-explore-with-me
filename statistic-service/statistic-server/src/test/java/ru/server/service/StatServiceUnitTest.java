@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -51,6 +52,7 @@ class StatServiceUnitTest {
                 .builder()
                 .app("test-app")
                 .uri("/test")
+                .eventsIds(List.of())
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -82,6 +84,22 @@ class StatServiceUnitTest {
 
         verify(statisticRepository, times(1))
                 .save(endpointHitEntity);
+    }
+
+    @Test
+    void addStatisticSaveAllTest() {
+        endpointHitEntityWithId.setUri("/test/1");
+        endpointHitEntity.setUri("/test/1");
+        statisticRequest.setEventsIds(List.of(1L));
+
+        when(statisticRepository
+                .saveAll(anyList()))
+                .thenReturn(List.of(endpointHitEntityWithId));
+
+        statisticService.addStatistic(statisticRequest);
+
+        verify(statisticRepository, times(1))
+                .saveAll(List.of(endpointHitEntity));
     }
 
     @Test

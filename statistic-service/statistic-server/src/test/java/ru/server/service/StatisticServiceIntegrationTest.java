@@ -34,6 +34,7 @@ class StatisticServiceIntegrationTest {
                 .builder()
                 .app("test-app")
                 .uri("/test")
+                .eventsIds(List.of(1L, 2L))
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -42,8 +43,6 @@ class StatisticServiceIntegrationTest {
     @Test
     @SneakyThrows
     void addAndGetStatisticTest() {
-        final List<ViewStatistic> actualList;
-
         statisticService.addStatistic(statisticRequest);
 
         final List<ViewStatistic> expectedList = statisticRepository
@@ -53,12 +52,12 @@ class StatisticServiceIntegrationTest {
                         getPage(0, 10))
                 .getContent();
 
-        actualList = statisticService
+        final List<ViewStatistic> actualList = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of(),
-                        false,
+                        List.of("/test/1", "/test/2"),
+                        true,
                         0,
                         10);
 
