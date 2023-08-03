@@ -11,6 +11,7 @@ import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.server.mapper.StatisticMapper;
 import ru.server.dao.StatisticRepository;
+import ru.server.model.EndpointHitEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,13 +30,16 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     @Transactional
     @Modifying
-    public StatisticRequest addStatistic(StatisticRequest statisticRequest) {
-        final StatisticRequest createdStatisticRequest = StatisticMapper
-                .toStatisticRequest(
-                        statisticRepository.save(
-                                StatisticMapper.toEndpointHitEntity(statisticRequest)));
-        log.info("STATISTIC => Создан createdStatisticRequest в статистике => {}", createdStatisticRequest);
-        return createdStatisticRequest;
+    public void addStatistic(StatisticRequest statisticRequest) {
+        if (statisticRequest.getEventsIds().isEmpty()) {
+            final EndpointHitEntity endpointHitEntity = statisticRepository.save(
+                    StatisticMapper.toEndpointHitEntity(statisticRequest));
+            log.info("STATISTIC => Создан endpointHitEntity в статистике => {}", endpointHitEntity);
+        } else {
+            final List<EndpointHitEntity> endpointHitEntityList = statisticRepository.saveAll(
+                    StatisticMapper.toEndpointHitEntityList(statisticRequest));
+            log.info("STATISTIC => Создан endpointHitEntityList в статистике => {}", endpointHitEntityList);
+        }
     }
 
     @Override

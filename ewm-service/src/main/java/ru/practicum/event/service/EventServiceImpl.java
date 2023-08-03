@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.client.StatisticClient;
 import ru.defaultComponent.ewmService.dto.event.*;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
@@ -27,6 +28,7 @@ import ru.practicum.request.mapper.RequestMapper;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.EventEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +59,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     private final UserAdminService userAdminService;
     private final CategoryAdminService categoryAdminService;
     private final RequestAdminService requestAdminService;
+    final StatisticClient statisticClient;
 
     @Override
     public List<EventFullResponseDto> getAllEvents(List<Long> users, List<EventState> states,
@@ -284,31 +287,42 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Override
     public List<EventShortResponseDto> getAllEvents(String text, List<Long> categories, Boolean paid,
                                                     String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                                    String sort, int from, int size) throws BadRequestException {
+                                                    String sort, int from, int size, HttpServletRequest httpServletRequest) throws BadRequestException {
         final LocalDateTime start = getLocalDateTimeFormatting(rangeStart);
         final LocalDateTime end = getLocalDateTimeFormatting(rangeEnd);
         checkStartIsAfterEndPublic(start, end);
-        PageRequest pageRequest = null;
+        PageRequest pageRequest;
         if (sort != null) {
             if (sort.equals("EVENT_DATE")) {
                 pageRequest = getPageSortDescByProperties(from, size, "eventDate");
             } else if (sort.equals("VIEWS")) {
                 pageRequest = getPageSortDescByProperties(from, size, "views");
+            } else {
+                pageRequest = getPageSortDescByProperties(from, size, "id");
             }
         } else {
             pageRequest = getPageSortDescByProperties(from, size, "id");
         }
+        final List<Long> eventIds = new ArrayList<>();
         final Page<EventShortResponseDto> eventShortDtoPage = eventRepository
                 .findByPublic(categories, paid, start, end, onlyAvailable, text, pageRequest)
-                .map(EventMapper::toEventShortResponseDto);
+                .map(eventEntity -> {
+                    eventEntity.setViews(eventEntity.getViews() + 1);
+                    eventIds.add(eventEntity.getId());
+                    return EventMapper.toEventShortResponseDto(eventEntity);
+                });
+        statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, eventIds));
         log.info("PUBLIC => Поиск событий => totalElement => {} text => {}, categories => {}, paid => {}, " +
                         "rangeStart => {}, rangeEnd => {}, onlyAvailable => {}, sort => {}, from => {}, size => {}",
                 eventShortDtoPage.getTotalElements(), text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         return eventShortDtoPage.getContent();
     }
 
+    //TODO потренироваться с QUERYDSL
+    //TODO воспользоваться eventEntity.setViews(eventEntity.getViews() + 1); => statisticClient.getStatistics()
+
     @Override
-    public EventFullResponseDto getEventById(long eventId) throws NotFoundException {
+    public EventFullResponseDto getEventById(long eventId, HttpServletRequest httpServletRequest) throws NotFoundException {
         final EventEntity eventEntity = this.findEventEntityById(eventId);
         if (eventEntity.getState() != PUBLISHED) {
             throw new NotFoundException("PUBLIC => Событие по id => " + eventId + " != PUBLISHED");
@@ -317,6 +331,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(
                         eventRepository.save(eventEntity));
+        statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, List.of()));
         log.info("PUBLIC => Событие по id => {} получено", eventId);
         return eventFullResponseDto;
     }

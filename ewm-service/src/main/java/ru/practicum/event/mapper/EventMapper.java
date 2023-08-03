@@ -2,6 +2,7 @@ package ru.practicum.event.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.event.model.EventEntity;
 import ru.practicum.category.mapper.CategoryMapper;
@@ -10,7 +11,9 @@ import ru.practicum.event.model.Location;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.UserEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @UtilityClass
 public class EventMapper {
@@ -88,6 +91,17 @@ public class EventMapper {
                 .builder()
                 .lat(location.getLat())
                 .lon(location.getLon())
+                .build();
+    }
+
+    public StatisticRequest toStatisticRequest(HttpServletRequest httpServletRequest, List<Long> eventsIds) {
+        return StatisticRequest
+                .builder()
+                .app(httpServletRequest.getServerName())
+                .uri(httpServletRequest.getRequestURI())
+                .eventsIds(eventsIds)
+                .ip(httpServletRequest.getRemoteAddr())
+                .createdOn(LocalDateTime.now())
                 .build();
     }
 

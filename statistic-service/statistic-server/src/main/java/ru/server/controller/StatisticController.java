@@ -31,9 +31,9 @@ public class StatisticController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public StatisticRequest addStatistic(@Valid @RequestBody StatisticRequest statisticRequest) {
+    public void addStatistic(@Valid @RequestBody StatisticRequest statisticRequest) {
         log.info("STATISTIC-SERVER => Запрошено сохранение информации => {}", statisticRequest);
-        return statisticService.addStatistic(statisticRequest);
+        statisticService.addStatistic(statisticRequest);
     }
 
     @GetMapping("/stats")

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
 import ru.defaultComponent.ewmService.enums.StateUserRequest;
 
 import javax.validation.constraints.Size;

@@ -5,6 +5,7 @@ import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EventPublicService {
@@ -17,8 +18,10 @@ public interface EventPublicService {
                                              Boolean onlyAvailable,
                                              String sort,
                                              int from,
-                                             int size) throws BadRequestException;
+                                             int size,
+                                             HttpServletRequest httpServletRequest) throws BadRequestException;
 
-    EventFullResponseDto getEventById(long eventId) throws NotFoundException;
+    EventFullResponseDto getEventById(long eventId,
+                                      HttpServletRequest httpServletRequest) throws NotFoundException;
 
 }

@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
@@ -31,13 +32,17 @@ public class StatisticRequest {
     @NotBlank
     String uri;
 
+    List<Long> eventsIds;
+
     @NotBlank
     String ip;
 
     @NotNull
-    @PastOrPresent //TODO !PastOrPresent
+    @PastOrPresent
     @JsonProperty("timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime createdOn;
+
+    //TODO !PastOrPresent !"timestamp"
 
 }

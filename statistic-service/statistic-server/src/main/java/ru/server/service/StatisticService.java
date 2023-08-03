@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface StatisticService {
 
-    StatisticRequest addStatistic(StatisticRequest statisticRequest);
+    void addStatistic(StatisticRequest statisticRequest);
 
     List<ViewStatistic> getStatistics(LocalDateTime start,
                                       LocalDateTime end,
