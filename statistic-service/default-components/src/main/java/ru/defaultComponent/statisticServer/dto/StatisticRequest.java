@@ -1,6 +1,7 @@
 package ru.defaultComponent.statisticServer.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class StatisticRequest {
     @NotBlank
     String uri;
 
+    @JsonIgnore
     @Builder.Default
     List<Long> eventsIds = emptyList();
 

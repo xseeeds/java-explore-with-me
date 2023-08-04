@@ -1,5 +1,6 @@
 package ru.defaultComponent.statisticServer.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public class ViewStatistic {
 
     String uri;
 
+    @JsonIgnore
     Long eventId;
 
     Long hits;
