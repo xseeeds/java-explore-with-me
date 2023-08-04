@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -55,7 +56,7 @@ import static ru.defaultComponent.pageRequest.UtilPage.getPageSortDescByProperti
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToUpdateEventAdmin;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToAddEventPrivate;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToUpdateEventPrivate;
-import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndPublic;
+import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndEvent;
 
 @Slf4j
 @Service
@@ -101,6 +102,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 eventEntity.setState(CANCELED);
             }
             if (updateEventAdminRequestDto.getStateAction() == PUBLISH_EVENT) {
+                eventEntity.setPublishedOn(LocalDateTime.now());
                 eventEntity.setState(PUBLISHED);
             }
         }
@@ -135,6 +137,14 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
                         "ADMIN => Событие по id => " + eventId + " не существует поиск СЕРВИСОВ"));
+    }
+
+    @Override
+    public EventEntity findEventEntityByIdAndStatusPublished(long eventId) throws NotFoundException {
+        log.info("ADMIN => запрос события со статусом PUBLISHED по id => {} для СЕРВИСОВ", eventId);
+        return eventRepository.findByIdAndState(eventId, PUBLISHED)
+                .orElseThrow(() -> new NotFoundException(
+                        "PUBLIC => Событие по id => " + eventId + " != PUBLISHED"));
     }
 
     @Override
@@ -295,9 +305,9 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     public List<EventShortResponseDto> getAllEvents(String text, List<Long> categories, Boolean paid,
                                                     String rangeStart, String rangeEnd, Boolean onlyAvailable,
                                                     String sort, int from, int size, HttpServletRequest httpServletRequest) throws BadRequestException {
-        final LocalDateTime start = getLocalDateTimeFormatting(rangeStart);
-        final LocalDateTime end = getLocalDateTimeFormatting(rangeEnd);
-        checkStartIsAfterEndPublic(start, end);
+        AtomicReference<LocalDateTime> start = new AtomicReference<>(getLocalDateTimeFormatting(rangeStart));
+        LocalDateTime end = getLocalDateTimeFormatting(rangeEnd);
+        checkStartIsAfterEndEvent(start.get(), end);
         PageRequest pageRequest;
         if (sort != null) {
             if (sort.equals("EVENT_DATE")) {
@@ -311,18 +321,31 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
             pageRequest = getPageSortDescByProperties(from, size, "id");
         }
         final Page<EventEntity> eventEntityPage = eventRepository
-                .findByPublic(categories, paid, start, end, onlyAvailable, text, pageRequest);
+                .findByPublic(categories, paid, start.get(), end, onlyAvailable, text, pageRequest);
         final List<Long> eventIds = new ArrayList<>();
-        eventEntityPage.forEach(eventEntity -> eventIds.add(eventEntity.getId()));
         statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, eventIds));
-        final Map<Long, Long> eventIdViewHitMap = statisticClient.getStatistics(start, end,
+        if (start.get() == null && end == null) {
+            eventEntityPage.forEach(eventEntity -> {
+                eventIds.add(eventEntity.getId());
+                if (start.get() == null || !start.get().isAfter(eventEntity.getPublishedOn())) {
+                    start.set(eventEntity.getPublishedOn());
+                }
+            });
+            if (start.get() == null) {
+                start.set(LocalDateTime.now());
+            }
+            end = LocalDateTime.now().plusSeconds(1L);
+        } else {
+            eventEntityPage.forEach(eventEntity -> eventIds.add(eventEntity.getId()));
+        }
+        final Map<Long, Long> eventIdViewHitMap = statisticClient.getStatistics(start.get(), end,
                         eventIds.stream()
                                 .map(eventId -> httpServletRequest.getRequestURI() + "/" + eventId)
                                 .collect(toList()),
                         true)
                 .stream()
                 .collect(toMap(v -> Long.parseLong(v.getUri().substring(
-                        v.getUri().lastIndexOf("/") + 1))
+                                v.getUri().lastIndexOf("/") + 1))
                         /*ViewStatistic::getEventId => For unique views when getAllEvents*/, ViewStatistic::getHits));
         final Page<EventShortResponseDto> eventShortResponseDtoPage = eventEntityPage
                 .map(eventEntity -> {
@@ -339,19 +362,15 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
 
     @Override
     public EventFullResponseDto getEventById(long eventId, HttpServletRequest httpServletRequest) throws NotFoundException {
-        final EventEntity eventEntity = this.findEventEntityById(eventId);
-        if (eventEntity.getState() != PUBLISHED) {
-            throw new NotFoundException("PUBLIC => Событие по id => " + eventId + " != PUBLISHED");
-        }
-        final EventFullResponseDto eventFullResponseDto = EventMapper
-                .toEventFullResponseDto(
-                        eventRepository.save(eventEntity));
+        final EventEntity eventEntity = this.findEventEntityByIdAndStatusPublished(eventId);
         statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, emptyList()));
         final List<ViewStatistic> viewStatisticList = statisticClient.getStatistics(eventEntity.getPublishedOn(),
                 LocalDateTime.now().plusSeconds(1L), List.of(httpServletRequest.getRequestURI()),
                 true);
+        final EventFullResponseDto eventFullResponseDto = EventMapper
+                .toEventFullResponseDto(eventEntity);
         if (!viewStatisticList.isEmpty() && Objects.equals(Long.parseLong(viewStatisticList.get(0).getUri().substring(
-                viewStatisticList.get(0).getUri().lastIndexOf("/") + 1))
+                        viewStatisticList.get(0).getUri().lastIndexOf("/") + 1))
                 /*viewStatisticList.get(0).getEventId().equals( => For unique views when getAllEvents*/, eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
         }

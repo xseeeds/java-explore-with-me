@@ -10,7 +10,6 @@ import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.event.model.EventEntity;
 import ru.practicum.category.mapper.CategoryMapper;
-import ru.defaultComponent.ewmService.enums.EventState;
 import ru.practicum.event.model.Location;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.UserEntity;
@@ -18,6 +17,8 @@ import ru.practicum.user.model.UserEntity;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.defaultComponent.ewmService.enums.EventState.PENDING;
 
 @UtilityClass
 public class EventMapper {
@@ -36,9 +37,8 @@ public class EventMapper {
                 .location(toLocation(createEventRequestDto.getLocation()))
                 .paid(createEventRequestDto.getPaid())
                 .participantLimit(createEventRequestDto.getParticipantLimit())
-                .publishedOn(LocalDateTime.now())
                 .requestModeration(createEventRequestDto.getRequestModeration())
-                .state(EventState.PENDING)
+                .state(PENDING)
                 .title(createEventRequestDto.getTitle())
                 .build();
     }

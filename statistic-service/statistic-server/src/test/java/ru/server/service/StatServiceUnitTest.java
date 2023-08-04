@@ -43,7 +43,7 @@ class StatServiceUnitTest {
         endpointHitEntity = EndpointHitEntity
                 .builder()
                 .app("test-app")
-                .uri("/test/1")
+                .uri("/events/1")
                 .eventId(1L)
                 .ip("255.255.255.255")
                 .createdOn(now)
@@ -52,7 +52,7 @@ class StatServiceUnitTest {
         statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/events")
                 .eventsIds(List.of(1L))
                 .ip("255.255.255.255")
                 .createdOn(now)
@@ -62,7 +62,7 @@ class StatServiceUnitTest {
                 .builder()
                 .id(1L)
                 .app("test-app")
-                .uri("/test/1")
+                .uri("/events/1")
                 .eventId(1L)
                 .ip("255.255.255.255")
                 .createdOn(now)
@@ -78,7 +78,7 @@ class StatServiceUnitTest {
 
     @Test
     void addStatisticTest() {
-        statisticRequest.setUri("/test/1");
+        statisticRequest.setUri("/events/1");
         statisticRequest.setEventsIds(emptyList());
 
         when(statisticRepository
@@ -93,8 +93,8 @@ class StatServiceUnitTest {
 
     @Test
     void addStatisticSaveAllTest() {
-        endpointHitEntity.setUri("/test");
-        endpointHitEntityWithId.setUri("/test");
+        endpointHitEntity.setUri("/events");
+        endpointHitEntityWithId.setUri("/events");
 
         when(statisticRepository
                 .saveAll(anyList()))
@@ -122,8 +122,7 @@ class StatServiceUnitTest {
                 now.minusDays(1),
                 now.plusDays(1),
                 emptyList(),
-                false
-        );
+                false);
 
         assertEquals(expectedList, actualList);
     }

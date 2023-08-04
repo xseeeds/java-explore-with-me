@@ -11,6 +11,7 @@ import ru.practicum.event.model.EventEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
@@ -24,7 +25,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
                                   @Param("states") List<EventState> states, @Param("start") LocalDateTime rangeStart,
                                   @Param("end") LocalDateTime rangeEnd, Pageable page);
 
-    Page<EventEntity> findAllByInitiator(long id, Pageable page);
+    Page<EventEntity> findAllByInitiator(long eventId, Pageable page);
 
     @Query("select ee from EventEntity as ee " +
             "where ee.state = ru.defaultComponent.ewmService.enums.EventState.PUBLISHED " +
@@ -39,5 +40,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     Page<EventEntity> findByPublic(@Param("categories") List<Long> categories, @Param("paid") Boolean paid,
                                    @Param("start") LocalDateTime rangeStart, @Param("end") LocalDateTime rangeEnd,
                                    @Param("onlyAvailable") Boolean onlyAvailable, @Param("text") String text, Pageable page);
+
+    Optional<EventEntity> findByIdAndState(long eventId, EventState state);
 
 }

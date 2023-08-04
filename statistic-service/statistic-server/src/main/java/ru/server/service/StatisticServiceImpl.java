@@ -14,7 +14,7 @@ import ru.server.dao.StatisticRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndPublic;
+import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndStatistic;
 
 @Service
 @Slf4j
@@ -29,7 +29,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Modifying
     public List<StatisticRequest> addStatistic(StatisticRequest statisticRequest) {
         final List<StatisticRequest> statisticRequestList;
-        if (statisticRequest.getEventsIds().isEmpty()) {
+        if (statisticRequest.getEventsIds().isEmpty() || !statisticRequest.getUri().equals("/events")) {
             statisticRequestList = StatisticMapper
                     .toStatisticRequestList(
                             statisticRepository.save(
@@ -45,12 +45,14 @@ public class StatisticServiceImpl implements StatisticService {
         return statisticRequestList;
     }
 
+    //TODO !statisticRequest.getUri().equals("/events") for test delete after
+
     @Override
     public List<ViewStatistic> getStatistics(LocalDateTime start,
                                              LocalDateTime end,
                                              List<String> uris,
                                              boolean unique) throws BadRequestException {
-        checkStartIsAfterEndPublic(start, end);
+        checkStartIsAfterEndStatistic(start, end);
         final List<ViewStatistic> viewStatisticList;
         if (uris.isEmpty()) {
             if (!unique) {

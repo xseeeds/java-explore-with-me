@@ -49,7 +49,7 @@ class StatisticControllerTest {
         statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/events")
                 .eventsIds(emptyList())
                 .ip("255.255.255.255")
                 .createdOn(LocalDateTime.now().truncatedTo(SECONDS))
@@ -72,7 +72,7 @@ class StatisticControllerTest {
         viewStatistic = ViewStatistic
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/events")
                 .hits(1L)
                 .build();
 

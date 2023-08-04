@@ -27,52 +27,50 @@ class StatisticServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        now = LocalDateTime.now();
-
         statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
-                .uri("/test")
+                .uri("/events")
                 .eventsIds(List.of(1L, 2L))
                 .ip("255.255.255.255")
-                .createdOn(now)
                 .build();
     }
 
     @Test
     @SneakyThrows
     void addAndGetStatisticTest() {
+        now = LocalDateTime.now();
+        statisticRequest.setCreatedOn(now);
+
         statisticService.addStatistic(statisticRequest);
 
-        final List<ViewStatistic> expectedList = statisticRepository
+        final List<ViewStatistic> expectedListNotUnique = statisticRepository
                 .findStatisticByUris(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"));
+                        List.of("/events/1", "/events/2"));
 
-        final List<ViewStatistic> expectedList2 = statisticRepository
+        final List<ViewStatistic> expectedListUnique = statisticRepository
                 .findStatisticForUniqueIp(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"));
+                        List.of("/events/1", "/events/2"));
 
-        final List<ViewStatistic> actualList = statisticService
+        final List<ViewStatistic> actualListNotUnique = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"),
-                        false
-                );
+                        List.of("/events/1", "/events/2"),
+                        false);
 
-        final List<ViewStatistic> actualList2 = statisticService
+        final List<ViewStatistic> actualListUnique = statisticService
                 .getStatistics(
                         now.minusDays(1),
                         now.plusDays(1),
-                        List.of("/test/1", "/test/2"),
-                        true
-                );
+                        List.of("/events/1", "/events/2"),
+                        true);
 
-        assertEquals(expectedList, actualList);
-        assertEquals(expectedList2, actualList2);
+        assertEquals(expectedListNotUnique, actualListNotUnique);
+        assertEquals(expectedListUnique, actualListUnique);
     }
 }

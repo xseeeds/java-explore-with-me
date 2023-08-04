@@ -45,13 +45,13 @@ public class StatisticClient {
                 .body(BodyInserters.fromValue(statisticRequest))
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError,
-                        error -> Mono.error(new RuntimeException("API not found")))
+                        error -> Mono.error(new RuntimeException("WEB-CLIENT => Statistic-API not found")))
                 .onStatus(HttpStatus::is5xxServerError,
-                        error -> Mono.error(new RuntimeException("Server is not responding")))
+                        error -> Mono.error(new RuntimeException("WEB-CLIENT => Statistic-Server is not responding")))
                 .bodyToFlux(StatisticRequest.class)
                 .collectList()
                 .block();
-        log.info("STATISTIC-CLIENT => Создан запрос сохранение статистики по посещениям statisticRequestList => {}",
+        log.info("WEB-CLIENT => Создан запрос сохранение статистики по посещениям statisticRequestList => {}",
                 statisticRequestList);
     }
 
@@ -72,13 +72,13 @@ public class StatisticClient {
                                 .build())
                         .retrieve()
                         .onStatus(HttpStatus::is4xxClientError,
-                                error -> Mono.error(new RuntimeException("API not found")))
+                                error -> Mono.error(new RuntimeException("WEB-CLIENT => Statistic-API not found")))
                         .onStatus(HttpStatus::is5xxServerError,
-                                error -> Mono.error(new RuntimeException("Server is not responding")))
+                                error -> Mono.error(new RuntimeException("WEB-CLIENT => Statistic-Server is not responding")))
                         .toEntityList(ViewStatistic.class)
                         .block())
                 .getBody();
-        log.info("STATISTIC-CLIENT => Запрошена статистика по посещениям с => {} по => {}, uris => {}, unique => {}, " +
+        log.info("WEB-CLIENT =>  => Запрошена статистика по посещениям с => {} по => {}, uris => {}, unique => {}, " +
                         "viewStatisticList.size => {}", start, end, uris, unique,
                 viewStatisticList != null ? viewStatisticList.size() : "viewStatisticList is null");
         return viewStatisticList != null ? viewStatisticList : emptyList();

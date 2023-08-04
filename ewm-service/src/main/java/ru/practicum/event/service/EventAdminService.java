@@ -28,6 +28,8 @@ public interface EventAdminService {
 
     EventEntity findEventEntityById(long eventId) throws NotFoundException;
 
+    EventEntity findEventEntityByIdAndStatusPublished(long eventId) throws NotFoundException;
+
     void checkEventIsExistById(long eventId) throws NotFoundException;
 
     void saveEventEntity(EventEntity eventEntity);

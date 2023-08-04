@@ -45,6 +45,6 @@ public class StatisticRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN_DATE_TIME)
     LocalDateTime createdOn;
 
-    //TODO !PastOrPresent !"timestamp"
-
 }
+
+//TODO !PastOrPresent !"timestamp"
