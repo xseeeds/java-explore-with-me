@@ -345,8 +345,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                         true)
                 .stream()
                 .collect(toMap(v -> Long.parseLong(v.getUri().substring(
-                                v.getUri().lastIndexOf("/") + 1))
-                        /*ViewStatistic::getEventId => For unique views when getAllEvents*/, ViewStatistic::getHits));
+                                v.getUri().lastIndexOf("/") + 1)), ViewStatistic::getHits));
         final Page<EventShortResponseDto> eventShortResponseDtoPage = eventEntityPage
                 .map(eventEntity -> {
                     eventEntity.setViews(eventIdViewHitMap.getOrDefault(eventEntity.getId(), 0L));
@@ -370,8 +369,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(eventEntity);
         if (!viewStatisticList.isEmpty() && Objects.equals(Long.parseLong(viewStatisticList.get(0).getUri().substring(
-                        viewStatisticList.get(0).getUri().lastIndexOf("/") + 1))
-                /*viewStatisticList.get(0).getEventId().equals( => For unique views when getAllEvents*/, eventFullResponseDto.getId())) {
+                        viewStatisticList.get(0).getUri().lastIndexOf("/") + 1)), eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
         }
         log.info("PUBLIC => Событие по id => {} получено", eventId);

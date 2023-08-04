@@ -13,15 +13,25 @@ import static java.util.stream.Collectors.toList;
 public class StatisticMapper {
 
     public EndpointHitEntity toEndpointHitEntity(StatisticRequest statisticRequest) {
-        return EndpointHitEntity
-                .builder()
-                .app(statisticRequest.getApp())
-                .uri(statisticRequest.getUri())
-                .eventId(Long.parseLong(statisticRequest.getUri()
-                        .substring(statisticRequest.getUri().lastIndexOf("/") + 1))) //For unique views when getAllEvents
-                .ip(statisticRequest.getIp())
-                .createdOn(statisticRequest.getCreatedOn())
-                .build();
+        if (!statisticRequest.getUri().equals("/events")) {
+            return EndpointHitEntity
+                    .builder()
+                    .app(statisticRequest.getApp())
+                    .uri(statisticRequest.getUri())
+                    .eventId(Long.parseLong(statisticRequest.getUri()
+                            .substring(statisticRequest.getUri().lastIndexOf("/") + 1)))
+                    .ip(statisticRequest.getIp())
+                    .createdOn(statisticRequest.getCreatedOn())
+                    .build();
+        } else {
+            return EndpointHitEntity
+                    .builder()
+                    .app(statisticRequest.getApp())
+                    .uri(statisticRequest.getUri())
+                    .ip(statisticRequest.getIp())
+                    .createdOn(statisticRequest.getCreatedOn())
+                    .build();
+        }
     }
 
     public List<EndpointHitEntity> toEndpointHitEntityList(StatisticRequest statisticRequest) {
@@ -31,7 +41,7 @@ public class StatisticMapper {
                 .map(eventId -> EndpointHitEntity
                         .builder()
                         .app(statisticRequest.getApp())
-                        .uri(statisticRequest.getUri())     //.uri(statisticRequest.getUri() + "/" + eventId) For unique views when getAllEvents
+                        .uri(statisticRequest.getUri())
                         .eventId(eventId)
                         .ip(statisticRequest.getIp())
                         .createdOn(statisticRequest.getCreatedOn())

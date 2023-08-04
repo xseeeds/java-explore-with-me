@@ -29,23 +29,21 @@ public class StatisticServiceImpl implements StatisticService {
     @Modifying
     public List<StatisticRequest> addStatistic(StatisticRequest statisticRequest) {
         final List<StatisticRequest> statisticRequestList;
-        if (statisticRequest.getEventsIds().isEmpty() || !statisticRequest.getUri().equals("/events")) {
-            statisticRequestList = StatisticMapper
-                    .toStatisticRequestList(
-                            statisticRepository.save(
-                                    StatisticMapper.toEndpointHitEntity(statisticRequest)));
-        } else {
+        if (!statisticRequest.getEventsIds().isEmpty()) {
             statisticRequestList = StatisticMapper
                     .toStatisticRequestList(
                             statisticRepository.saveAll(
                                     StatisticMapper.toEndpointHitEntityList(statisticRequest)),
                             statisticRequest.getEventsIds());
+        } else {
+            statisticRequestList = StatisticMapper
+                    .toStatisticRequestList(
+                            statisticRepository.save(
+                                    StatisticMapper.toEndpointHitEntity(statisticRequest)));
         }
         log.info("STATISTIC => Создан statisticRequestList в статистике => {}", statisticRequestList);
         return statisticRequestList;
     }
-
-    //TODO !statisticRequest.getUri().equals("/events") for test delete after
 
     @Override
     public List<ViewStatistic> getStatistics(LocalDateTime start,

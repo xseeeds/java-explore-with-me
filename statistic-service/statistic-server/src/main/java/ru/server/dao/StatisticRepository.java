@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface StatisticRepository extends JpaRepository<EndpointHitEntity, Long> {
 
-    //    For unique views when getAllEvents add eh.eventId in ViewStatistic and GROUP BY
+//  For unique views when getAllEvents add eh.eventId in ViewStatistic and GROUP BY or change to publicGetAllEvents
 
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +

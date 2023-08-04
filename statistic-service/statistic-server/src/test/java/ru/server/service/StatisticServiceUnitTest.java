@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class StatServiceUnitTest {
+class StatisticServiceUnitTest {
     @Mock
     private StatisticRepository statisticRepository;
 //  Inject for only Impl
@@ -76,6 +76,7 @@ class StatServiceUnitTest {
                 .build();
     }
 
+
     @Test
     void addStatisticTest() {
         statisticRequest.setUri("/events/1");
@@ -90,6 +91,7 @@ class StatServiceUnitTest {
         verify(statisticRepository, times(1))
                 .save(endpointHitEntity);
     }
+
 
     @Test
     void addStatisticSaveAllTest() {
