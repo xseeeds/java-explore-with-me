@@ -83,8 +83,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Override
     public EventFullResponseDto updateEvent(long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto)
             throws BadRequestException, NotFoundException, ConflictException {
-        final EventEntity eventEntity = this
-                .findEventEntityById(eventId);
+        final EventEntity eventEntity = this.findEventEntityById(eventId);
         if (updateEventAdminRequestDto.getStateAction() != null) {
             if (eventEntity.getState() != PENDING && updateEventAdminRequestDto.getStateAction() == PUBLISH_EVENT) {
                 throw new ConflictException("ADMIN => Событие != PENDING");
@@ -338,11 +337,9 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 .toEventFullResponseDto(
                         eventRepository.save(eventEntity));
         statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, emptyList()));
-        final List<ViewStatistic> viewStatisticList = statisticClient
-                .getStatistics(eventEntity.getPublishedOn(),
-                        LocalDateTime.now(),
-                        List.of(httpServletRequest.getRequestURI()),
-                        true);
+        final List<ViewStatistic> viewStatisticList = statisticClient.getStatistics(eventEntity.getPublishedOn(),
+                LocalDateTime.now().plusNanos(1), List.of(httpServletRequest.getRequestURI()),
+                true);
         if (!viewStatisticList.isEmpty() && viewStatisticList.get(0).getEventId().equals(eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
         }

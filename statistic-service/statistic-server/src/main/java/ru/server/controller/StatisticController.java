@@ -38,8 +38,10 @@ public class StatisticController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatistic> getStatistics(@RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime start,
-                                             @RequestParam @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime end,
+    public List<ViewStatistic> getStatistics(@RequestParam(required = false)
+                                             @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime start,
+                                             @RequestParam(required = false)
+                                             @DateTimeFormat(pattern = PATTERN_DATE_TIME) LocalDateTime end,
                                              @RequestParam(defaultValue = "") List<String> uris,
                                              @RequestParam(defaultValue = "false") boolean unique) {
         log.info("STATISTIC-SERVER => Запрошена статистика по посещениям с => {} по => {}, uris => {}, unique => {}",

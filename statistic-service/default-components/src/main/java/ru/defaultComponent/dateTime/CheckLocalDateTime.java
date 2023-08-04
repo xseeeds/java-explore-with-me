@@ -11,7 +11,7 @@ public class CheckLocalDateTime {
     public void checkStartIsAfterEndPublic(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
             return;
-            //throw new BadRequestException("PUBLIC => Время начала и окончания не должна быть null");
+            //!!!!!throw new BadRequestException("PUBLIC => Время начала и окончания не должна быть null");!!!!!
         }
         if (!start.isBefore(end)) {
             throw new BadRequestException("PUBLIC => Время начала => " + start + " не может быть позже времени окончания => " + end);

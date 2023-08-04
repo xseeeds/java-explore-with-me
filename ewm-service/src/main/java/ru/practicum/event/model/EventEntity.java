@@ -54,8 +54,9 @@ public class EventEntity {
     @Column(name = "category_id")
     Long category;
 
+    @Builder.Default
     @Column(name = "confirmed_requests")
-    Long confirmedRequests;
+    Long confirmedRequests = 0L;
 
     @Column(name = "created_date", nullable = false)
     LocalDateTime createdOn;
@@ -99,7 +100,8 @@ public class EventEntity {
     @Column(length = 128)
     String title;
 
-    Long views;
+    @Builder.Default
+    Long views = 0L;
 
 }
 

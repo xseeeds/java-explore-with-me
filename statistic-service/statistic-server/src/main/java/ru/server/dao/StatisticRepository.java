@@ -14,28 +14,28 @@ public interface StatisticRepository extends JpaRepository<EndpointHitEntity, Lo
 
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
-            "WHERE eh.createdOn BETWEEN ?1 AND ?2 AND eh.uri IN ?3 " +
+            "WHERE eh.createdOn BETWEEN coalesce(?1, eh.createdOn) AND coalesce(?2, eh.createdOn) AND eh.uri IN ?3 " +
             "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.ip) DESC")
     List<ViewStatistic> findStatisticByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
-            "WHERE eh.createdOn BETWEEN ?1 AND ?2 " +
+            "WHERE eh.createdOn BETWEEN coalesce(?1, eh.createdOn) AND coalesce(?2, eh.createdOn) " +
             "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.id) DESC")
     List<ViewStatistic> findAllStatistics(LocalDateTime start, LocalDateTime end);
 
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT(DISTINCT(eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
-            "WHERE eh.createdOn BETWEEN ?1 AND ?2 AND eh.uri IN ?3 " +
+            "WHERE eh.createdOn BETWEEN coalesce(?1, eh.createdOn) AND coalesce(?2, eh.createdOn) AND eh.uri IN ?3 " +
             "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.id) DESC")
     List<ViewStatistic> findStatisticForUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, eh.eventId, COUNT(DISTINCT(eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
-            "WHERE eh.createdOn BETWEEN ?1 AND ?2 " +
+            "WHERE eh.createdOn BETWEEN coalesce(?1, eh.createdOn) AND coalesce(?2, eh.createdOn) " +
             "GROUP BY eh.app, eh.uri, eh.eventId " +
             "ORDER BY COUNT(eh.ip) DESC")
     List<ViewStatistic> findAllStatisticsForUniqueIp(LocalDateTime start, LocalDateTime end);
