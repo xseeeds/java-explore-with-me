@@ -338,7 +338,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                         eventRepository.save(eventEntity));
         statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, emptyList()));
         final List<ViewStatistic> viewStatisticList = statisticClient.getStatistics(eventEntity.getPublishedOn(),
-                LocalDateTime.now().plusNanos(1), List.of(httpServletRequest.getRequestURI()),
+                LocalDateTime.now().plusSeconds(1L), List.of(httpServletRequest.getRequestURI()),
                 true);
         if (!viewStatisticList.isEmpty() && viewStatisticList.get(0).getEventId().equals(eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
