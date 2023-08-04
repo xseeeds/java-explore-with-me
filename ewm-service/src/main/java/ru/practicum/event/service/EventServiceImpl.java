@@ -8,11 +8,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.client.StatisticClient;
-import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
+import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
+import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
+import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.event.EventResponseStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
 import ru.defaultComponent.ewmService.dto.event.UpdateEventAdminRequestDto;
-import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
+import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
 import ru.defaultComponent.ewmService.enums.RequestStatus;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
@@ -35,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -309,14 +315,18 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final List<Long> eventIds = new ArrayList<>();
         eventEntityPage.forEach(eventEntity -> eventIds.add(eventEntity.getId()));
         statisticClient.save(EventMapper.toStatisticRequest(httpServletRequest, eventIds));
-        final Map<Long, Long> viewStatisticMap = statisticClient.getStatistics(start, end,
-                        eventIds.stream().map(eventId -> "/events/" + eventId).collect(toList()),
+        final Map<Long, Long> eventIdViewHitMap = statisticClient.getStatistics(start, end,
+                        eventIds.stream()
+                                .map(eventId -> httpServletRequest.getRequestURI() + "/" + eventId)
+                                .collect(toList()),
                         true)
                 .stream()
-                .collect(toMap(ViewStatistic::getEventId, ViewStatistic::getHits));
+                .collect(toMap(v -> Long.parseLong(v.getUri().substring(
+                        v.getUri().lastIndexOf("/") + 1))
+                        /*ViewStatistic::getEventId => For unique views when getAllEvents*/, ViewStatistic::getHits));
         final Page<EventShortResponseDto> eventShortResponseDtoPage = eventEntityPage
                 .map(eventEntity -> {
-                    eventEntity.setViews(viewStatisticMap.getOrDefault(eventEntity.getId(), 0L));
+                    eventEntity.setViews(eventIdViewHitMap.getOrDefault(eventEntity.getId(), 0L));
                     return EventMapper.toEventShortResponseDto(eventEntity);
                 });
         log.info("PUBLIC => Поиск событий => totalElements => {} text => {}, categories => {}, paid => {}, " +
@@ -340,7 +350,9 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final List<ViewStatistic> viewStatisticList = statisticClient.getStatistics(eventEntity.getPublishedOn(),
                 LocalDateTime.now().plusSeconds(1L), List.of(httpServletRequest.getRequestURI()),
                 true);
-        if (!viewStatisticList.isEmpty() && viewStatisticList.get(0).getEventId().equals(eventFullResponseDto.getId())) {
+        if (!viewStatisticList.isEmpty() && Objects.equals(Long.parseLong(viewStatisticList.get(0).getUri().substring(
+                viewStatisticList.get(0).getUri().lastIndexOf("/") + 1))
+                /*viewStatisticList.get(0).getEventId().equals( => For unique views when getAllEvents*/, eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
         }
         log.info("PUBLIC => Событие по id => {} получено", eventId);

@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
+import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
+import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
 import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.event.EventResponseStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.practicum.event.service.EventPrivateService;
-import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

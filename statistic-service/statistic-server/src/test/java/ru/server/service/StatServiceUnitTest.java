@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class StatServiceUnitTest {
     @Mock
     private StatisticRepository statisticRepository;
-    @InjectMocks//Inject for only Impl
+//  Inject for only Impl
+    @InjectMocks
     private StatisticServiceImpl statisticServiceImpl;
 
     private StatisticRequest statisticRequest;
@@ -51,8 +52,8 @@ class StatServiceUnitTest {
         statisticRequest = StatisticRequest
                 .builder()
                 .app("test-app")
-                .uri("/test/1")
-                .eventsIds(emptyList())
+                .uri("/test")
+                .eventsIds(List.of(1L))
                 .ip("255.255.255.255")
                 .createdOn(now)
                 .build();
@@ -71,13 +72,15 @@ class StatServiceUnitTest {
                 .builder()
                 .app(statisticRequest.getApp())
                 .uri(statisticRequest.getUri())
-                .eventId(1L)
                 .hits(1L)
                 .build();
     }
 
     @Test
     void addStatisticTest() {
+        statisticRequest.setUri("/test/1");
+        statisticRequest.setEventsIds(emptyList());
+
         when(statisticRepository
                 .save(any(EndpointHitEntity.class)))
                 .thenReturn(endpointHitEntityWithId);
@@ -90,8 +93,8 @@ class StatServiceUnitTest {
 
     @Test
     void addStatisticSaveAllTest() {
-        statisticRequest.setUri("/test");
-        statisticRequest.setEventsIds(List.of(1L));
+        endpointHitEntity.setUri("/test");
+        endpointHitEntityWithId.setUri("/test");
 
         when(statisticRepository
                 .saveAll(anyList()))

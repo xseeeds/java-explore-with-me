@@ -18,7 +18,7 @@ public class StatisticMapper {
                 .app(statisticRequest.getApp())
                 .uri(statisticRequest.getUri())
                 .eventId(Long.parseLong(statisticRequest.getUri()
-                        .substring(statisticRequest.getUri().lastIndexOf("/") + 1)))
+                        .substring(statisticRequest.getUri().lastIndexOf("/") + 1))) //For unique views when getAllEvents
                 .ip(statisticRequest.getIp())
                 .createdOn(statisticRequest.getCreatedOn())
                 .build();
@@ -31,7 +31,7 @@ public class StatisticMapper {
                 .map(eventId -> EndpointHitEntity
                         .builder()
                         .app(statisticRequest.getApp())
-                        .uri(statisticRequest.getUri() + "/" + eventId)
+                        .uri(statisticRequest.getUri())     //.uri(statisticRequest.getUri() + "/" + eventId) For unique views when getAllEvents
                         .eventId(eventId)
                         .ip(statisticRequest.getIp())
                         .createdOn(statisticRequest.getCreatedOn())

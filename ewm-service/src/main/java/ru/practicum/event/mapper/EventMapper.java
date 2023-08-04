@@ -1,7 +1,11 @@
 package ru.practicum.event.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
+import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
+import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
+import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
+import ru.defaultComponent.ewmService.dto.event.LocationResponseDto;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.event.model.EventEntity;
