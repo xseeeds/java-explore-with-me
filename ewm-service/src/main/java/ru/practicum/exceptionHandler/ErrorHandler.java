@@ -14,7 +14,7 @@ import ru.defaultComponent.exception.model.ApiError;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
-import ru.defaultComponent.exception.model.ValidationErrorResponse;
+import ru.defaultComponent.exception.model.ValidationApiError;
 import ru.defaultComponent.exception.model.Violation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -98,7 +98,7 @@ public class ErrorHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ValidationErrorResponse errorConstraintValidationException(
+    public ValidationApiError errorConstraintValidationException(
             final ConstraintViolationException e
     ) {
         log.warn("EVENT-SERVER => " + e.getMessage(), e);
@@ -113,7 +113,7 @@ public class ErrorHandler {
                         .message(error.getMessage())
                         .build())
                 .collect(toList());
-        return ValidationErrorResponse
+        return ValidationApiError
                 .builder()
                 .violations(errorPathVariable)
                 .build();
@@ -121,7 +121,7 @@ public class ErrorHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ValidationErrorResponse errorMethodArgumentNotValidException(
+    public ValidationApiError errorMethodArgumentNotValidException(
             final MethodArgumentNotValidException e
     ) {
         log.warn("EVENT-SERVER => " + e.getMessage(), e);
@@ -137,7 +137,7 @@ public class ErrorHandler {
                         .message(error.getDefaultMessage())
                         .build())
                 .collect(toList());
-        return ValidationErrorResponse
+        return ValidationApiError
                 .builder()
                 .violations(errorRequestBody)
                 .build();

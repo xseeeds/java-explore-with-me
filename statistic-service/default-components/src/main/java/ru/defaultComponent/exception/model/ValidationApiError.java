@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ValidationErrorResponse {
+public class ValidationApiError {
 
     List<Violation> violations;
 

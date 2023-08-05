@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
-import ru.defaultComponent.exception.model.ErrorResponse;
-import ru.defaultComponent.exception.model.ValidationErrorResponse;
+import ru.defaultComponent.exception.model.ApiError;
+import ru.defaultComponent.exception.model.ValidationApiError;
 import ru.defaultComponent.exception.model.Violation;
 
 import javax.validation.ConstraintViolationException;
@@ -39,68 +39,68 @@ public class ErrorHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
-    public ErrorResponse errorBadRequestException(
+    public ApiError errorBadRequestException(
             final BadRequestException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(BAD_REQUEST)
                 .reason("errorBadRequestException")
-                .description(e.getMessage())
+                .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MismatchedInputException.class)
-    public ErrorResponse errorMismatchedInputException(
+    public ApiError errorMismatchedInputException(
             final MismatchedInputException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         final int endIndex = nthIndexOf(e.getMessage(), "\n", 1);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(BAD_REQUEST)
                 .reason("errorMismatchedInputException")
-                .description(e.getMessage().substring(0, endIndex))
+                .message(e.getMessage().substring(0, endIndex))
                 .build();
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ErrorResponse errorMissingServletRequestParameterException(
+    public ApiError errorMissingServletRequestParameterException(
             final MissingServletRequestParameterException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(BAD_REQUEST)
                 .reason("errorMissingServletRequestParameterException")
-                .description(e.getMessage())
+                .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public ErrorResponse errorMissingRequestHeaderException(
+    public ApiError errorMissingRequestHeaderException(
             final MissingRequestHeaderException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(BAD_REQUEST)
                 .reason("STATISTIC-SERVER => errorMissingRequestHeaderException")
-                .description(e.getMessage())
+                .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ValidationErrorResponse errorConstraintValidationException(
+    public ValidationApiError errorConstraintValidationException(
             final ConstraintViolationException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
@@ -115,7 +115,7 @@ public class ErrorHandler {
                         .message(error.getMessage())
                         .build())
                 .collect(toList());
-        return ValidationErrorResponse
+        return ValidationApiError
                 .builder()
                 .violations(errorPathVariable)
                 .build();
@@ -123,7 +123,7 @@ public class ErrorHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ValidationErrorResponse errorMethodArgumentNotValidException(
+    public ValidationApiError errorMethodArgumentNotValidException(
             final MethodArgumentNotValidException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
@@ -139,7 +139,7 @@ public class ErrorHandler {
                         .message(error.getDefaultMessage())
                         .build())
                 .collect(toList());
-        return ValidationErrorResponse
+        return ValidationApiError
                 .builder()
                 .violations(errorRequestBody)
                 .build();
@@ -147,92 +147,92 @@ public class ErrorHandler {
 
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ErrorResponse errorNotFoundException(
+    public ApiError errorNotFoundException(
             final NotFoundException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(NOT_FOUND)
                 .reason("STATISTIC-SERVER => errorNotFoundException")
-                .description(e.getMessage())
+                .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(CONFLICT)
     @ExceptionHandler(ConflictException.class)
-    public ErrorResponse errorConflictException(
+    public ApiError errorConflictException(
             final ConflictException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorConflictException")
-                .description(e.getMessage())
+                .message(e.getMessage())
                 .build();
     }
 
     @ResponseStatus(CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorResponse errorDataIntegrityViolationException(
+    public ApiError errorDataIntegrityViolationException(
             final DataIntegrityViolationException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         final int endIndex = nthIndexOf(e.getMostSpecificCause().getMessage(), ")", 2);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorDataIntegrityViolationException")
-                .description(e.getMostSpecificCause().getMessage().substring(0, endIndex + 1))
+                .message(e.getMostSpecificCause().getMessage().substring(0, endIndex + 1))
                 .build();
     }
 
     @ResponseStatus(CONFLICT)
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ErrorResponse errorSQLIntegrityConstraintViolationException(
+    public ApiError errorSQLIntegrityConstraintViolationException(
             final SQLIntegrityConstraintViolationException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         final int endIndex = nthIndexOf(e.getMessage(), ")", 2);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorSQLIntegrityConstraintViolationException")
-                .description(e.getMessage().substring(0, endIndex + 1))
+                .message(e.getMessage().substring(0, endIndex + 1))
                 .build();
     }
 
     @ResponseStatus(CONFLICT)
     @ExceptionHandler(SQLSyntaxErrorException.class)
-    public ErrorResponse errorSQLSyntaxErrorException(
+    public ApiError errorSQLSyntaxErrorException(
             final SQLSyntaxErrorException e
     ) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         final int endIndex = nthIndexOf(e.getMessage(), "\n", 1);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorSQLSyntaxErrorException")
-                .description(e.getMessage().substring(0, endIndex))
+                .message(e.getMessage().substring(0, endIndex))
                 .build();
     }
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse errorInternalServerErrorException(final Throwable e) {
+    public ApiError errorInternalServerErrorException(final Throwable e) {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
-        return ErrorResponse
+        return ApiError
                 .builder()
                 .timestamp(now)
                 .status(INTERNAL_SERVER_ERROR)
                 .reason("STATISTIC-SERVER => errorInternalServerErrorException")
-                .description("Произошла непредвиденная ошибка => " + e.getMessage())
+                .message("Произошла непредвиденная ошибка => " + e.getMessage())
                 .build();
     }
 
