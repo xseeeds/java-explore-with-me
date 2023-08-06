@@ -153,6 +153,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>check</id>
@@ -177,6 +178,9 @@
 				</plugins>
 			</reporting>
 		</profile>
+
+
+
 		<profile>
 			<id>coverage</id>
 			<build>
