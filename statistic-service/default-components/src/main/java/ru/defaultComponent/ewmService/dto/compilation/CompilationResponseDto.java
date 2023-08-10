@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
-
 import java.util.List;
 
 @Data

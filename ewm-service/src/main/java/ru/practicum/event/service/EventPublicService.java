@@ -4,7 +4,6 @@ import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
 import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.NotFoundException;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 

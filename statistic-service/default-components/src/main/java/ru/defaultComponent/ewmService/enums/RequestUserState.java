@@ -1,6 +1,6 @@
 package ru.defaultComponent.ewmService.enums;
 
-public enum StateUserRequest {
+public enum RequestUserState {
 
     SEND_TO_REVIEW,
 

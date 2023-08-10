@@ -16,6 +16,6 @@ public interface CompilationAdminService {
 
     CompilationEntity findCompilationEntityById(long compilationId) throws NotFoundException;
 
-    void checkCompilationIsExistById(long compilationId) throws NotFoundException;
+    void checkCompilationEntityIsExistById(long compilationId) throws NotFoundException;
 
 }

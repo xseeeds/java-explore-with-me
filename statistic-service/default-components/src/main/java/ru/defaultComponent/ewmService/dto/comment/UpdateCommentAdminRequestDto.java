@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.user;
+package ru.defaultComponent.ewmService.dto.comment;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import ru.defaultComponent.ewmService.enums.RequestAdminState;
 import javax.validation.constraints.Size;
 
 @Data
@@ -16,17 +14,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreateUserRequest {
+public class UpdateCommentAdminRequestDto {
 
-    Long id;
+    @Size(min = 5, max = 5000)
+    String text;
 
-    @Email
-    @NotBlank
-    @Size(min = 6, max = 254)
-    String email;
-
-    @NotBlank
-    @Size(min = 2, max = 250)
-    String name;
+    RequestAdminState stateAction;
 
 }

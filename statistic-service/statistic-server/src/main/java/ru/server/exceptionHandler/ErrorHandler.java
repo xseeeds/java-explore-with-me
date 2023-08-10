@@ -17,7 +17,6 @@ import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.defaultComponent.exception.model.ApiError;
 import ru.defaultComponent.exception.model.ValidationApiError;
 import ru.defaultComponent.exception.model.Violation;
-
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLSyntaxErrorException;

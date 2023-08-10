@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.server.service.StatisticService;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -18,8 +18,7 @@ public class ViewStatistic {
 
     String uri;
 
-//    For unique views when getAllEvents
-//    @JsonIgnore
+//TODO    For unique views when getAllEvents
 //    Long eventId;
 
     Long hits;

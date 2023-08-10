@@ -16,7 +16,6 @@ import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
 import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
 import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationRequestDto;
 import ru.practicum.compilation.service.CompilationAdminService;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -25,7 +24,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/compilations")
-public class CompilationsControllerAdmin {
+public class CompilationControllerAdmin {
 
     private final CompilationAdminService compilationService;
 

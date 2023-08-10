@@ -16,7 +16,6 @@ import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
 import ru.practicum.event.service.EventAdminService;
 import ru.defaultComponent.ewmService.dto.event.UpdateEventAdminRequestDto;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/events")
-public class EventsAdminController {
+public class EventAdminController {
 
     private final EventAdminService eventAdminService;
 
@@ -49,7 +48,7 @@ public class EventsAdminController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullResponseDto updateEvent(@Positive @PathVariable long eventId,
                                             @Valid @RequestBody UpdateEventAdminRequestDto updateEventAdminRequestDto) {
-        log.info("EWM-SERVICE-admin => Запрошен обновление событий по id => {}", eventId);
+        log.info("EWM-SERVICE-admin => Запрошено обновление событий по id => {}", eventId);
         return eventAdminService.updateEvent(eventId, updateEventAdminRequestDto);
     }
 

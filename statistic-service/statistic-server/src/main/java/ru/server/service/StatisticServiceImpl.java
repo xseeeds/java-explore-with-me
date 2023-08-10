@@ -10,16 +10,15 @@ import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.server.mapper.StatisticMapper;
 import ru.server.dao.StatisticRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndStatistic;
+import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndNotBeNull;
 
-@Service
 @Slf4j
-@Transactional(readOnly = true)
+@Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StatisticServiceImpl implements StatisticService {
 
     private final StatisticRepository statisticRepository;
@@ -50,7 +49,7 @@ public class StatisticServiceImpl implements StatisticService {
                                              LocalDateTime end,
                                              List<String> uris,
                                              boolean unique) throws BadRequestException {
-        checkStartIsAfterEndStatistic(start, end);
+        checkStartIsAfterEndNotBeNull(start, end);
         final List<ViewStatistic> viewStatisticList;
         if (uris.isEmpty()) {
             if (!unique) {
@@ -69,6 +68,6 @@ public class StatisticServiceImpl implements StatisticService {
         return viewStatisticList;
     }
 
-    //TODO !QUERYDSL
+    //TODO можно потренировать !QUERYDSL
 
 }

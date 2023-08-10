@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.category.CategoryRequestDto;
+import ru.defaultComponent.ewmService.dto.category.CreateCategoryRequestDto;
 import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.practicum.category.service.CategoryAdminService;
 
@@ -24,23 +24,23 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/categories")
-public class CategoriesAdminController {
+public class CategoryAdminController {
 
     private final CategoryAdminService categoryAdminService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponseDto addCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto) {
-        log.info("EWM-SERVICE-admin => Запрошено добавление новой категории => {}", categoryRequestDto);
-        return categoryAdminService.addCategory(categoryRequestDto);
+    public CategoryResponseDto addCategory(@Valid @RequestBody CreateCategoryRequestDto createCategoryRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрошено добавление новой категории => {}", createCategoryRequestDto);
+        return categoryAdminService.addCategory(createCategoryRequestDto);
     }
 
     @PatchMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryResponseDto updateCategory(@Positive @PathVariable long categoryId,
-                                             @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
-        log.info("EWM-SERVICE-admin => Запрошено обновление категории по id => {} => {}", categoryId, categoryRequestDto);
-        return categoryAdminService.updateCategory(categoryId, categoryRequestDto);
+                                             @Valid @RequestBody CreateCategoryRequestDto createCategoryRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрошено обновление категории по id => {} => {}", categoryId, createCategoryRequestDto);
+        return categoryAdminService.updateCategory(categoryId, createCategoryRequestDto);
     }
 
     @DeleteMapping("/{categoryId}")

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.Column;
 import javax.persistence.GenerationType;
 import javax.persistence.Entity;

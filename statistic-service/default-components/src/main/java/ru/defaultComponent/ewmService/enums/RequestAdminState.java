@@ -1,6 +1,6 @@
 package ru.defaultComponent.ewmService.enums;
 
-public enum StateAdminRequest {
+public enum RequestAdminState {
 
     PUBLISH_EVENT,
 

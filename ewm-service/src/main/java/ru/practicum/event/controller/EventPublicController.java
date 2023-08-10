@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
 import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
 import ru.practicum.event.service.EventPublicService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/events")
-public class EventsPublicController {
+public class EventPublicController {
 
     final EventPublicService eventPublicService;
 

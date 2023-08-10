@@ -7,12 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
 
 @Data
@@ -23,6 +24,7 @@ import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE
 public class CreateEventRequestDto {
 
     @NotNull
+    @NotBlank
     @Size(min = 20, max = 2000)
     String annotation;
 
@@ -30,6 +32,7 @@ public class CreateEventRequestDto {
     Long category;
 
     @NotNull
+    @NotBlank
     @Size(min = 20, max = 7000)
     String description;
 
@@ -41,15 +44,16 @@ public class CreateEventRequestDto {
     LocalDateTime eventDate;
 
     @Builder.Default
-    Boolean paid = Boolean.FALSE;
+    Boolean paid = FALSE;
 
     @Builder.Default
     Long participantLimit = 0L;
 
     @Builder.Default
-    Boolean requestModeration = Boolean.TRUE;
+    Boolean requestModeration = TRUE;
 
     @NotNull
+    @NotBlank
     @Size(min = 3, max = 120)
     String title;
 

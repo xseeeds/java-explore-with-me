@@ -13,7 +13,6 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.event.model.Location;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.UserEntity;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +22,9 @@ import static ru.defaultComponent.ewmService.enums.EventState.PENDING;
 @UtilityClass
 public class EventMapper {
 
-    public EventEntity toNewEventEntity(CreateEventRequestDto createEventRequestDto, UserEntity userEntity, CategoryEntity categoryEntity) {
+    public EventEntity toNewEventEntity(CreateEventRequestDto createEventRequestDto,
+                                        UserEntity userEntity,
+                                        CategoryEntity categoryEntity) {
         return EventEntity
                 .builder()
                 .annotation(createEventRequestDto.getAnnotation())

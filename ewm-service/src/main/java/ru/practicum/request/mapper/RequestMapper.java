@@ -13,7 +13,7 @@ public class RequestMapper {
                 .created(participationEntity.getCreatedOn())
                 .event(participationEntity.getEvent())
                 .requester(participationEntity.getRequester())
-                .status(participationEntity.getStatus())
+                .status(participationEntity.getState())
                 .build();
     }
 

@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
 import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
 import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
-import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateDto;
-import ru.defaultComponent.ewmService.dto.event.EventResponseStatusUpdateDto;
+import ru.defaultComponent.ewmService.dto.event.EventRequestUpdateStateDto;
+import ru.defaultComponent.ewmService.dto.event.EventResponseUpdateStateDto;
 import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.practicum.event.service.EventPrivateService;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/events")
-public class EventsPrivateController {
+public class EventPrivateController {
 
     private final EventPrivateService eventPrivateService;
 
@@ -87,12 +86,12 @@ public class EventsPrivateController {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseStatusUpdateDto changeRequestsStatus(@Positive @PathVariable long userId,
-                                                             @Positive @PathVariable long eventId,
-                                                             @RequestBody EventRequestStatusUpdateDto eventRequestStatusUpdateDto) {
+    public EventResponseUpdateStateDto changeRequestsState(@Positive @PathVariable long userId,
+                                                           @Positive @PathVariable long eventId,
+                                                           @Valid @RequestBody EventRequestUpdateStateDto eventRequestUpdateStateDto) {
         log.info("EWM-SERVICE-private => Запрошено изменение статуса события по id => {}, пользователем по id => {}, " +
-                "EventRequestStatusUpdateDto => {}", eventId, userId, eventRequestStatusUpdateDto);
-        return eventPrivateService.changeRequestsStatus(userId, eventId, eventRequestStatusUpdateDto);
+                "EventRequestUpdateStateDto => {}", eventId, userId, eventRequestUpdateStateDto);
+        return eventPrivateService.changeRequestsState(userId, eventId, eventRequestUpdateStateDto);
     }
 
 }

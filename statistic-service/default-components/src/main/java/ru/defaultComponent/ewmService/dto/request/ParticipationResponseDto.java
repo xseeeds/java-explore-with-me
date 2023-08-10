@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.enums.RequestStatus;
-
+import ru.defaultComponent.ewmService.enums.RequestState;
 import java.time.LocalDateTime;
 
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;
@@ -29,6 +28,6 @@ public class ParticipationResponseDto {
 
     Long requester;
 
-    RequestStatus status;
+    RequestState status;
 
 }

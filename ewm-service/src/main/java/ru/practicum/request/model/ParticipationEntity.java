@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import ru.defaultComponent.ewmService.enums.RequestStatus;
+import ru.defaultComponent.ewmService.enums.RequestState;
 import ru.practicum.event.model.EventEntity;
 import ru.practicum.user.model.UserEntity;
-
 import javax.persistence.GenerationType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -65,6 +64,6 @@ public class ParticipationEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)
-    RequestStatus status;
+    RequestState state;
 
 }

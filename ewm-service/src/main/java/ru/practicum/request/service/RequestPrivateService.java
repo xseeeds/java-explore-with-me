@@ -3,7 +3,6 @@ package ru.practicum.request.service;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
-
 import java.util.List;
 
 public interface RequestPrivateService {

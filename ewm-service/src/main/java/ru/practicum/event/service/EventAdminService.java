@@ -7,7 +7,6 @@ import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.event.model.EventEntity;
-
 import java.util.List;
 
 public interface EventAdminService {
@@ -30,8 +29,10 @@ public interface EventAdminService {
 
     EventEntity findEventEntityByIdAndStatusPublished(long eventId) throws NotFoundException;
 
-    void checkEventIsExistById(long eventId) throws NotFoundException;
+    void checkEventEntityIsExistById(long eventId) throws NotFoundException;
 
     void saveEventEntity(EventEntity eventEntity);
+
+    void checkEventsByCategoryId(long categoryId) throws ConflictException;
 
 }

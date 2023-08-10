@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import ru.practicum.request.service.RequestPrivateService;
-
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/requests")
-public class RequestsPrivateController {
+public class RequestPrivateController {
 
     private final RequestPrivateService privateRequestService;
 

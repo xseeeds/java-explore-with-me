@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
 import ru.defaultComponent.ewmService.dto.user.UserShortResponseDto;
-
 import java.time.LocalDateTime;
 
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.PATTERN_DATE_TIME;

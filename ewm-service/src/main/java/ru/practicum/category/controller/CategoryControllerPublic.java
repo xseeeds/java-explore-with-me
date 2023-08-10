@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
 import ru.practicum.category.service.CategoryPublicService;
-
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -21,23 +20,23 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/categories")
-public class CategoriesControllerPublic {
+public class CategoryControllerPublic {
 
     private final CategoryPublicService categoryPublicService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryResponseDto> getCategories(@RequestParam(defaultValue = "0") int from,
+    public List<CategoryResponseDto> getAllCategories(@RequestParam(defaultValue = "0") int from,
                                                    @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-public => Запрошен список всех категорий from => {}, size => {}", from, size);
-        return categoryPublicService.getCategories(from, size);
+        return categoryPublicService.getAllCategories(from, size);
     }
 
     @GetMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryResponseDto getCategory(@Positive @PathVariable long categoryId) {
+    public CategoryResponseDto getCategoryById(@Positive @PathVariable long categoryId) {
         log.info("EWM-SERVICE-public => Запрошена категория id => {}", categoryId);
-        return categoryPublicService.getCategory(categoryId);
+        return categoryPublicService.getCategoryById(categoryId);
     }
 
 }

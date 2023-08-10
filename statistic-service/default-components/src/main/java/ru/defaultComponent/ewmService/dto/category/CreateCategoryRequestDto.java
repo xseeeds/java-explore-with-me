@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -15,12 +15,13 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryRequestDto {
+public class CreateCategoryRequestDto {
 
     Long id;
 
+    @NotNull
     @NotBlank
-    @Size(min = 1, max = 50)
+    @Size(min = 3, max = 50)
     String name;
 
 }

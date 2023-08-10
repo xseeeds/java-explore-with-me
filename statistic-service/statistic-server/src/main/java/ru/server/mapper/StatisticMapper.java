@@ -3,7 +3,6 @@ package ru.server.mapper;
 import lombok.experimental.UtilityClass;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.model.EndpointHitEntity;
-
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -11,6 +10,8 @@ import static java.util.stream.Collectors.toList;
 
 @UtilityClass
 public class StatisticMapper {
+
+//TODO if else EndpointHitEntity можно сделать с листом eventIds, если запрос /events, приложить к нему список eventIds
 
     public EndpointHitEntity toEndpointHitEntity(StatisticRequest statisticRequest) {
         if (!statisticRequest.getUri().equals("/events")) {

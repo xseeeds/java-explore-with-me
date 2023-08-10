@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
 import ru.practicum.compilation.service.CompilationPublicService;
-
 import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/compilations")
-public class CompilationsPublicController {
+public class CompilationPublicController {
 
     private final CompilationPublicService compilationPublicService;
 

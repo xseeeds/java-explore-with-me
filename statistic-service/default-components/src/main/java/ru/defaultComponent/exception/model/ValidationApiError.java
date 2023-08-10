@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import java.util.List;
 
 @Generated

@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.user.CreateUserRequest;
+import ru.defaultComponent.ewmService.dto.user.CreateUserRequestDto;
 import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
 import ru.practicum.user.service.UserAdminService;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -26,15 +25,15 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/users")
-public class UsersAdminController {
+public class UserAdminController {
 
     private final UserAdminService userAdminService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDto createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        log.info("EWM-SERVICE-admin => Запрос создание пользователя email => {}", createUserRequest.getEmail());
-        return userAdminService.createUser(createUserRequest);
+    public UserResponseDto createUser(@RequestBody @Valid CreateUserRequestDto createUserRequestDto) {
+        log.info("EWM-SERVICE-admin => Запрос создание пользователя email => {}", createUserRequestDto.getEmail());
+        return userAdminService.createUser(createUserRequestDto);
     }
 
     @DeleteMapping("/{userId}")
@@ -46,12 +45,12 @@ public class UsersAdminController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserResponseDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> userIds,
-                                          @RequestParam(defaultValue = "0") int from,
-                                          @RequestParam(defaultValue = "10") int size) {
+    public List<UserResponseDto> getUsersByIds(@RequestParam(name = "ids", required = false) List<Long> userIds,
+                                               @RequestParam(defaultValue = "0") int from,
+                                               @RequestParam(defaultValue = "10") int size) {
         log.info("EWM-SERVICE-admin => Запрошено получение пользователей по userIds => {}, from => {}, size => {}",
                 userIds, from, size);
-        return userAdminService.getUsers(userIds, from, size);
+        return userAdminService.getUsersByIds(userIds, from, size);
     }
 
 }

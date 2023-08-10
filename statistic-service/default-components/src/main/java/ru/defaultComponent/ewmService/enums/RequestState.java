@@ -1,6 +1,6 @@
 package ru.defaultComponent.ewmService.enums;
 
-public enum RequestStatus {
+public enum RequestState {
 
     CONFIRMED,
 

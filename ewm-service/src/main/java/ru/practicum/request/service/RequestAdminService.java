@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.request.model.ParticipationEntity;
-
 import java.util.List;
 
 public interface RequestAdminService {
@@ -15,7 +14,9 @@ public interface RequestAdminService {
 
     ParticipationEntity findRequestEntityById(long requestId) throws NotFoundException;
 
-    void checkRequestIsExistById(long requestId) throws NotFoundException;
+    void checkRequestEntityIsExistById(long requestId) throws NotFoundException;
+
+    void checkReParticipationInEvent(long userId, long eventId);
 
     void saveAllRequestEntity(List<ParticipationEntity> participationEntityList);
 
