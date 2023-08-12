@@ -27,16 +27,16 @@ public class EndpointHitEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 128, nullable = false)
     String app;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 128, nullable = false)
     String uri;
 
     @Column(name = "event_id")
     Long eventId;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 64, nullable = false)
     String ip;
 
     @Column(name = "created_date", nullable = false)

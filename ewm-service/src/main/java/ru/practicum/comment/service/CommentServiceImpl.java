@@ -98,23 +98,23 @@ public class CommentServiceImpl implements CommentAdminService, CommentPrivateSe
 
     @Override
     public CommentEntity findCommentEntityById(long commentId) throws NotFoundException {
-        log.info("ADMIN => Запрос комментария по id => {} для СЕРВИСОВ", commentId);
+        log.info("ADMIN => Запрос комментария по id => {}", commentId);
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Комментарий по id => " + commentId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Комментарий по id => " + commentId + " не существует"));
     }
 
     @Override
     public void checkCommentEntityIsExist(long commentId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует комментарий по id => {} для СЕРВИСОВ", commentId);
+        log.info("ADMIN => Запрос существует комментарий по id => {}", commentId);
         if (!commentRepository.existsById(commentId)) {
-            throw new NotFoundException("ADMIN => Комментарий по id => " + commentId + " не существует поиск СЕРВИСОВ");
+            throw new NotFoundException("ADMIN => Комментарий по id => " + commentId + " не существует");
         }
     }
 
     @Override
     public CommentEntity findByIdAndAuthor(long commentId, long userId) throws ConflictException {
-        log.info("ADMIN => Запрос комментария по id => {} и принадлежащего пользователю по id => {} для СЕРВИСОВ",
+        log.info("ADMIN => Запрос комментария по id => {} и принадлежащего пользователю по id => {}",
                 commentId, userId);
         return commentRepository.findByIdAndAuthor(commentId, userId)
                 .orElseThrow(() -> new ConflictException("ADMIN => Комментарий по id => " + commentId
@@ -123,11 +123,11 @@ public class CommentServiceImpl implements CommentAdminService, CommentPrivateSe
 
     @Override
     public void checkCommentEntityIsExistByUserId(long commentId, long userId) throws ConflictException {
-        log.info("ADMIN => Запрос принадлежит комментарий по id => {} пользователю по id => {} поиск СЕРВИСОВ",
+        log.info("ADMIN => Запрос принадлежит комментарий по id => {} пользователю по id => {}",
                 commentId, userId);
         if (!commentRepository.existsByIdAndAuthor(commentId, userId)) {
             throw new ConflictException("ADMIN => Комментарий по id => " + commentId
-                    + " не принадлежит пользователю по id => " + userId + " поиск СЕРВИСОВ");
+                    + " не принадлежит пользователю по id => " + userId);
         }
     }
 

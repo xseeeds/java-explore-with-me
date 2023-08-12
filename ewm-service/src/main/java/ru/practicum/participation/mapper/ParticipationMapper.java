@@ -1,11 +1,11 @@
-package ru.practicum.request.mapper;
+package ru.practicum.participation.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
-import ru.practicum.request.model.ParticipationEntity;
+import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.practicum.participation.model.ParticipationEntity;
 
 @UtilityClass
-public class RequestMapper {
+public class ParticipationMapper {
 
     public ParticipationResponseDto toParticipationResponseDto(ParticipationEntity participationEntity) {
         return ParticipationResponseDto.builder()

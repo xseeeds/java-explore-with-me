@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.event;
+package ru.defaultComponent.ewmService.dto.participation;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
 import java.util.List;
 
 @Data
@@ -14,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventResponseUpdateStateDto {
+public class ParticipationResponseUpdateStateDto {
 
     List<ParticipationResponseDto> confirmedRequests;
 

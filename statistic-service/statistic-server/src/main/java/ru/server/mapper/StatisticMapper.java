@@ -11,8 +11,6 @@ import static java.util.stream.Collectors.toList;
 @UtilityClass
 public class StatisticMapper {
 
-//TODO if else EndpointHitEntity можно сделать с листом eventIds, если запрос /events, приложить к нему список eventIds
-
     public EndpointHitEntity toEndpointHitEntity(StatisticRequest statisticRequest) {
         if (!statisticRequest.getUri().equals("/events")) {
             return EndpointHitEntity

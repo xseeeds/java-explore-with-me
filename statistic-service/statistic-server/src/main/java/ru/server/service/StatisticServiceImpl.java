@@ -68,6 +68,4 @@ public class StatisticServiceImpl implements StatisticService {
         return viewStatisticList;
     }
 
-    //TODO можно потренировать !QUERYDSL
-
 }

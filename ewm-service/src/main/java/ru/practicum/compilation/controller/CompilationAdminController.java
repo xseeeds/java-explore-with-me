@@ -24,15 +24,15 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/compilations")
-public class CompilationControllerAdmin {
+public class CompilationAdminController {
 
-    private final CompilationAdminService compilationService;
+    private final CompilationAdminService compilationAdminService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationResponseDto addCompilation(@Valid @RequestBody CreateCompilationRequestDto createCompilationRequestDto) {
         log.info("EWM-SERVICE-admin => Запрошено добавление новой подборки => {}", createCompilationRequestDto);
-        return compilationService.addCompilation(createCompilationRequestDto);
+        return compilationAdminService.addCompilation(createCompilationRequestDto);
     }
 
     @PatchMapping("/{compilationId}")
@@ -40,14 +40,14 @@ public class CompilationControllerAdmin {
     public CompilationResponseDto updateCompilation(@Positive @PathVariable long compilationId,
                                                     @Valid @RequestBody UpdateCompilationRequestDto updateCompilationRequestDto) {
         log.info("EWM-SERVICE-admin => Запрошено обновление подборки id => {}", compilationId);
-        return compilationService.updateCompilation(compilationId, updateCompilationRequestDto);
+        return compilationAdminService.updateCompilation(compilationId, updateCompilationRequestDto);
     }
 
     @DeleteMapping("/{compilationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@Positive @PathVariable long compilationId) {
         log.info("EWM-SERVICE-admin => Запрошено удаление подборки id => {}", compilationId);
-        compilationService.deleteCompilation(compilationId);
+        compilationAdminService.deleteCompilation(compilationId);
     }
 
 }

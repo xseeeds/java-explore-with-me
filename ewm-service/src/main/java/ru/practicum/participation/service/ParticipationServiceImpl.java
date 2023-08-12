@@ -1,4 +1,4 @@
-package ru.practicum.request.service;
+package ru.practicum.participation.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -7,14 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
+import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
-import ru.practicum.request.mapper.RequestMapper;
-import ru.practicum.request.dao.RequestRepository;
+import ru.practicum.participation.mapper.ParticipationMapper;
+import ru.practicum.participation.dao.ParticipationRepository;
 import ru.practicum.user.service.UserAdminService;
 import ru.practicum.event.model.EventEntity;
-import ru.practicum.request.model.ParticipationEntity;
+import ru.practicum.participation.model.ParticipationEntity;
 import ru.practicum.event.service.EventAdminService;
 
 import java.time.LocalDateTime;
@@ -27,23 +27,23 @@ import static ru.defaultComponent.pageRequest.UtilPage.getPageSortAscByPropertie
 @Slf4j
 @Service
 @Transactional(readOnly = true)
-public class RequestServiceImpl implements RequestAdminService, RequestPrivateService {
+public class ParticipationServiceImpl implements ParticipationAdminService, ParticipationPrivateService {
 
-    private final RequestRepository requestRepository;
+    private final ParticipationRepository participationRepository;
     private final EventAdminService eventAdminService;
     private final UserAdminService userAdminService;
 
-    public RequestServiceImpl(RequestRepository requestRepository,
-                              @Lazy EventAdminService eventAdminService,
-                              UserAdminService userAdminService) {
-        this.requestRepository = requestRepository;
+    public ParticipationServiceImpl(ParticipationRepository participationRepository,
+                                    @Lazy EventAdminService eventAdminService,
+                                    UserAdminService userAdminService) {
+        this.participationRepository = participationRepository;
         this.eventAdminService = eventAdminService;
         this.userAdminService = userAdminService;
     }
 
     @Override
-    public Page<ParticipationEntity> findAllByEventId(long eventId, Pageable page) {
-        final Page<ParticipationEntity> requestEntityPage = requestRepository
+    public Page<ParticipationEntity> findAllParticipationByEventId(long eventId, Pageable page) {
+        final Page<ParticipationEntity> requestEntityPage = participationRepository
                 .findAllByEvent(eventId, page);
         log.info("ADMIN => Запрошен список запросов на участие size => {} в событии по id => {} SERVICE",
                 requestEntityPage.getTotalElements(), eventId);
@@ -51,54 +51,54 @@ public class RequestServiceImpl implements RequestAdminService, RequestPrivateSe
     }
 
     @Override
-    public List<ParticipationEntity> findAllById(List<Long> requestIds) {
-        final List<ParticipationEntity> participationEntityList = requestRepository
-                .findAllById(requestIds);
+    public List<ParticipationEntity> findAllParticipationById(List<Long> participationIds) {
+        final List<ParticipationEntity> participationEntityList = participationRepository
+                .findAllById(participationIds);
         log.info("ADMIN => Запрошен список запросов на участие size => {} SERVICE", participationEntityList.size());
         return participationEntityList;
     }
 
     @Override
-    public ParticipationEntity findRequestEntityById(long requestId) throws NotFoundException {
-        log.info("ADMIN => Запрос на участие в событии по id => {} получен для СЕРВИСОВ", requestId);
-        return requestRepository.findById(requestId)
+    public ParticipationEntity findParticipationEntityById(long participationId) throws NotFoundException {
+        log.info("ADMIN => Запрос на участие в событии по id => {} получен", participationId);
+        return participationRepository.findById(participationId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Запрос на участие в событии по id => " + requestId + " не существует поиск СЕРВИСОВ поиск СЕРВИСОВ"));
+                        "ADMIN => Запрос на участие в событии по id => " + participationId + " не существует"));
     }
 
     @Override
-    public void checkRequestEntityIsExistById(long requestId) throws NotFoundException {
-        log.info("ADMIN => Запрос на участие в событии по id => {} для СЕРВИСОВ", requestId);
-        if (!requestRepository.existsById(requestId)) {
-            throw new NotFoundException("ADMIN => Запрос на участие в событии по id => " + requestId + " не существует поиск СЕРВИСОВ");
+    public void checkParticipationEntityIsExistById(long participationId) throws NotFoundException {
+        log.info("ADMIN => Запрос на участие в событии по id => {}", participationId);
+        if (!participationRepository.existsById(participationId)) {
+            throw new NotFoundException("ADMIN => Запрос на участие в событии по id => " + participationId + " не существует");
         }
     }
 
     @Override
     public void checkReParticipationInEvent(long userId, long eventId) {
-        log.info("ADMIN => Зарос проверка на повторное участие пользователя по id => {} в событии по id => {} для СЕРВИСОВ",
+        log.info("ADMIN => Зарос проверка на повторное участие пользователя по id => {} в событии по id => {}",
                 userId, eventId);
-        if (requestRepository.existsByRequesterAndEvent(userId, eventId)) {
+        if (participationRepository.existsByRequesterAndEvent(userId, eventId)) {
             throw new ConflictException("ADMIN => Повторное участие пользователя по id => " + userId
-                    + " в событии по id => " + eventId + " для СЕРВИСОВ");
+                    + " в событии по id => " + eventId);
         }
     }
 
     @Transactional
     @Modifying
     @Override
-    public void saveAllRequestEntity(List<ParticipationEntity> participationEntityList) {
-        requestRepository.saveAll(participationEntityList);
-        log.info("ADMIN => Запрос сохранения событий size => {} для СЕРВИСОВ", participationEntityList.size());
+    public void saveAllParticipationEntity(List<ParticipationEntity> participationEntityList) {
+        participationRepository.saveAll(participationEntityList);
+        log.info("ADMIN => Запрос сохранения заявок нва участие событий size => {}", participationEntityList.size());
     }
 
     @Override
-    public List<ParticipationResponseDto> getUserRequests(long userId, int from, int size) throws NotFoundException {
+    public List<ParticipationResponseDto> getUserParticipation(long userId, int from, int size) throws NotFoundException {
         userAdminService.checkUserEntityIsExistById(userId);
-        final Page<ParticipationResponseDto> participationRequestDtoPage = requestRepository
+        final Page<ParticipationResponseDto> participationRequestDtoPage = participationRepository
                 .findAllByRequester(
                         userId, getPageSortAscByProperties(from, size, "id"))
-                .map(RequestMapper::toParticipationResponseDto);
+                .map(ParticipationMapper::toParticipationResponseDto);
         log.info("PRIVATE => Запрошен список запросов на участие size => {}, для пользователя по id => {}",
                 participationRequestDtoPage.getTotalElements(), userId);
         return participationRequestDtoPage.getContent();
@@ -107,7 +107,7 @@ public class RequestServiceImpl implements RequestAdminService, RequestPrivateSe
     @Transactional
     @Modifying
     @Override
-    public ParticipationResponseDto createRequest(long userId, long eventId) throws NotFoundException, ConflictException {
+    public ParticipationResponseDto createParticipation(long userId, long eventId) throws NotFoundException, ConflictException {
         userAdminService.checkUserEntityIsExistById(userId);
         checkReParticipationInEvent(userId, eventId);
         final EventEntity eventEntity = eventAdminService.findEventEntityById(eventId);
@@ -132,9 +132,9 @@ public class RequestServiceImpl implements RequestAdminService, RequestPrivateSe
             eventAdminService.saveEventEntity(eventEntity);
             participationEntity.setState(CONFIRMED);
         }
-        final ParticipationResponseDto participationResponseDto = RequestMapper
+        final ParticipationResponseDto participationResponseDto = ParticipationMapper
                 .toParticipationResponseDto(
-                        requestRepository.save(participationEntity));
+                        participationRepository.save(participationEntity));
         log.info("PRIVATE => Сохранен запрос на участие пользователем по id => {} в событии по id => {}", userId, eventId);
         return participationResponseDto;
     }
@@ -142,13 +142,13 @@ public class RequestServiceImpl implements RequestAdminService, RequestPrivateSe
     @Transactional
     @Modifying
     @Override
-    public ParticipationResponseDto cancelRequest(long userId, long requestId) throws NotFoundException {
+    public ParticipationResponseDto cancelParticipation(long userId, long participationId) throws NotFoundException {
         userAdminService.checkUserEntityIsExistById(userId);
-        final ParticipationEntity participationEntity = this.findRequestEntityById(requestId);
+        final ParticipationEntity participationEntity = this.findParticipationEntityById(participationId);
         participationEntity.setState(CANCELED);
-        final ParticipationResponseDto participationResponseDto = RequestMapper
+        final ParticipationResponseDto participationResponseDto = ParticipationMapper
                 .toParticipationResponseDto(participationEntity);
-        log.info("PRIVATE => Отмена заявки на участие в событии по id => {} пользователем по id => {}", requestId, userId);
+        log.info("PRIVATE => Отмена заявки на участие в событии по id => {} пользователем по id => {}", participationId, userId);
         return participationResponseDto;
     }
 

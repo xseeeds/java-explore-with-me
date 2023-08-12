@@ -12,8 +12,6 @@ import java.util.List;
 @Repository
 public interface StatisticRepository extends JpaRepository<EndpointHitEntity, Long> {
 
-//TODO  For unique views when getAllEvents add eh.eventId in ViewStatistic and GROUP BY or change to publicGetAllEvents
-
     @Query("SELECT new ru.defaultComponent.statisticServer.dto.ViewStatistic(eh.app, eh.uri, COUNT((eh.ip))) " +
             "FROM EndpointHitEntity AS eh " +
             "WHERE eh.createdOn BETWEEN coalesce(:start, eh.createdOn) AND coalesce(:end, eh.createdOn) AND eh.uri IN :uris " +

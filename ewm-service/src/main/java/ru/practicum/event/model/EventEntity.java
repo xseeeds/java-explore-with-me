@@ -103,21 +103,3 @@ public class EventEntity {
     Long views = 0L;
 
 }
-
-//TODO пришел к такому выводу так думаю намного проще, что то я перемудрил) можно потренировать другой подход
-/*
-@ManyToMany(targetEntity = CommentEntity.class, fetch = FetchType.LAZY)
-@JoinTable(name = "event_comments",
-        joinColumns = @JoinColumn(name = "comment_id"),
-        inverseJoinColumns = @JoinColumn(name = "event_id"))
-List<CommentEntity> comments;
-
-commentEntity.of(id, authorShort(id, name), text)
-или вообще => in userEntity
-
-@ManyToMany(targetEntity = CommentEntity.class, fetch = FetchType.LAZY)
-@JoinTable(name = "user_comments",
-        joinColumns = @JoinColumn(name = "comment_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
-List<CommentEntity> comments;
-*/

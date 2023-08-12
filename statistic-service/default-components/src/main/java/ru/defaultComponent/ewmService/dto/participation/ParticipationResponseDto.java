@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.request;
+package ru.defaultComponent.ewmService.dto.participation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;

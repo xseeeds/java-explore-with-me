@@ -1,4 +1,4 @@
-package ru.practicum.request.model;
+package ru.practicum.participation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;

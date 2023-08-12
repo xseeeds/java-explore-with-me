@@ -1,13 +1,13 @@
-package ru.practicum.request.dao;
+package ru.practicum.participation.dao;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.practicum.request.model.ParticipationEntity;
+import ru.practicum.participation.model.ParticipationEntity;
 
 @Repository
-public interface RequestRepository extends JpaRepository<ParticipationEntity, Long> {
+public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long> {
 
     Page<ParticipationEntity> findAllByEvent(long eventId, Pageable page);
 

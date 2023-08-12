@@ -70,17 +70,17 @@ public class CategoryServiceImpl implements CategoryAdminService, CategoryPublic
 
     @Override
     public CategoryEntity findCategoryEntityById(long categoryId) throws NotFoundException {
-        log.info("ADMIN => Запрос категории по id => {} для СЕРВИСОВ", categoryId);
+        log.info("ADMIN => Запрос категории по id => {}", categoryId);
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Категория по id => " + categoryId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Категория по id => " + categoryId + " не существует"));
     }
 
     @Override
     public void checkCategoryEntityIsExistById(long categoryId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует категория по id => {} для СЕРВИСОВ", categoryId);
+        log.info("ADMIN => Запрос существует категория по id => {}", categoryId);
         if (!categoryRepository.existsById(categoryId)) {
-            throw new NotFoundException("ADMIN => Категория по id => " + categoryId + " не существует поиск СЕРВИСОВ");
+            throw new NotFoundException("ADMIN => Категория по id => " + categoryId + " не существует");
         }
     }
 

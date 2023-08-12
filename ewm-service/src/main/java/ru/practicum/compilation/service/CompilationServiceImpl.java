@@ -78,17 +78,17 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
 
     @Override
     public CompilationEntity findCompilationEntityById(long compilationId) throws NotFoundException {
-        log.info("ADMIN => запрос подборки по id => {} для СЕРВИСОВ", compilationId);
+        log.info("ADMIN => запрос подборки по id => {}", compilationId);
         return compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Подборка по id => " + compilationId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Подборка по id => " + compilationId + " не существует"));
     }
 
     @Override
     public void checkCompilationEntityIsExistById(long compilationId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует подборка по id => {} для СЕРВИСОВ", compilationId);
+        log.info("ADMIN => Запрос существует подборка по id => {}", compilationId);
         if (!compilationRepository.existsById(compilationId)) {
-            throw new NotFoundException("ADMIN => Подборка по id => " + compilationId + " не существует поиск СЕРВИСОВ");
+            throw new NotFoundException("ADMIN => Подборка по id => " + compilationId + " не существует");
         }
     }
 

@@ -1,4 +1,4 @@
-package ru.defaultComponent.ewmService.dto.event;
+package ru.defaultComponent.ewmService.dto.participation;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventRequestUpdateStateDto {
+public class ParticipationRequestUpdateStateDto {
 
     @NotNull
     List<Long> requestIds;

@@ -56,17 +56,17 @@ public class UserServiceImpl implements UserAdminService {
 
     @Override
     public UserEntity findUserEntityById(long userId) throws NotFoundException {
-        log.info("ADMIN => Запрос пользователь по id => {} получен для СЕРВИСОВ", userId);
+        log.info("ADMIN => Запрос пользователь по id => {} получен", userId);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Пользователь по id => " + userId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Пользователь по id => " + userId + " не существует"));
     }
 
     @Override
     public void checkUserEntityIsExistById(long userId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует пользователь по id => {} для СЕРВИСОВ", userId);
+        log.info("ADMIN => Запрос существует пользователь по id => {}", userId);
         if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("ADMIN => Пользователь по id => " + userId + " не существует поиск СЕРВИСОВ");
+            throw new NotFoundException("ADMIN => Пользователь по id => " + userId + " не существует");
         }
     }
 }
