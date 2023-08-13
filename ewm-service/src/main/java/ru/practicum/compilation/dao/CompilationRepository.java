@@ -11,8 +11,8 @@ import ru.practicum.compilation.model.CompilationEntity;
 @Repository
 public interface CompilationRepository extends JpaRepository<CompilationEntity, Long> {
 
-    @Query("select ce from CompilationEntity as ce " +
-            "where (:pinned is null or ce.pinned = :pinned)")
+    @Query("SELECT ce FROM CompilationEntity AS ce " +
+            "WHERE (:pinned IS NULL OR ce.pinned = :pinned)")
     Page<CompilationEntity> findAllByPinned(@Param("pinned") Boolean pinned, Pageable pageable);
 
 }

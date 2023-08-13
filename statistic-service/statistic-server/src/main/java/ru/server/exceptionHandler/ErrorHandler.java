@@ -17,7 +17,6 @@ import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.defaultComponent.exception.model.ApiError;
 import ru.defaultComponent.exception.model.ValidationApiError;
 import ru.defaultComponent.exception.model.Violation;
-
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLSyntaxErrorException;
@@ -35,8 +34,6 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Generated
 public class ErrorHandler {
 
-    private final LocalDateTime now = LocalDateTime.now();
-
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ApiError errorBadRequestException(
@@ -45,7 +42,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(BAD_REQUEST)
                 .reason("errorBadRequestException")
                 .message(e.getMessage())
@@ -61,7 +58,7 @@ public class ErrorHandler {
         final int endIndex = nthIndexOf(e.getMessage(), "\n", 1);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(BAD_REQUEST)
                 .reason("errorMismatchedInputException")
                 .message(e.getMessage().substring(0, endIndex))
@@ -76,7 +73,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(BAD_REQUEST)
                 .reason("errorMissingServletRequestParameterException")
                 .message(e.getMessage())
@@ -91,7 +88,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(BAD_REQUEST)
                 .reason("STATISTIC-SERVER => errorMissingRequestHeaderException")
                 .message(e.getMessage())
@@ -108,7 +105,7 @@ public class ErrorHandler {
                 .stream()
                 .map(error -> Violation
                         .builder()
-                        .timestamp(now)
+                        .timestamp(LocalDateTime.now())
                         .status(BAD_REQUEST)
                         .reason("STATISTIC-SERVER => errorConstraintValidationException")
                         .fieldName(error.getPropertyPath().toString())
@@ -132,7 +129,7 @@ public class ErrorHandler {
                 .stream()
                 .map(error -> Violation
                         .builder()
-                        .timestamp(now)
+                        .timestamp(LocalDateTime.now())
                         .status(BAD_REQUEST)
                         .reason("STATISTIC-SERVER => errorMethodArgumentNotValidException")
                         .fieldName(error.getField())
@@ -153,7 +150,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(NOT_FOUND)
                 .reason("STATISTIC-SERVER => errorNotFoundException")
                 .message(e.getMessage())
@@ -168,7 +165,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorConflictException")
                 .message(e.getMessage())
@@ -184,7 +181,7 @@ public class ErrorHandler {
         final int endIndex = nthIndexOf(e.getMostSpecificCause().getMessage(), ")", 2);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorDataIntegrityViolationException")
                 .message(e.getMostSpecificCause().getMessage().substring(0, endIndex + 1))
@@ -200,7 +197,7 @@ public class ErrorHandler {
         final int endIndex = nthIndexOf(e.getMessage(), ")", 2);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorSQLIntegrityConstraintViolationException")
                 .message(e.getMessage().substring(0, endIndex + 1))
@@ -216,7 +213,7 @@ public class ErrorHandler {
         final int endIndex = nthIndexOf(e.getMessage(), "\n", 1);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(CONFLICT)
                 .reason("STATISTIC-SERVER => errorSQLSyntaxErrorException")
                 .message(e.getMessage().substring(0, endIndex))
@@ -229,7 +226,7 @@ public class ErrorHandler {
         log.warn("STATISTIC-SERVER => " + e.getMessage(), e);
         return ApiError
                 .builder()
-                .timestamp(now)
+                .timestamp(LocalDateTime.now())
                 .status(INTERNAL_SERVER_ERROR)
                 .reason("STATISTIC-SERVER => errorInternalServerErrorException")
                 .message("Произошла непредвиденная ошибка => " + e.getMessage())

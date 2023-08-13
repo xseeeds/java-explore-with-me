@@ -5,10 +5,8 @@ import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
 import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
 import ru.practicum.compilation.model.CompilationEntity;
 import ru.practicum.event.mapper.EventMapper;
-
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-
 
 @UtilityClass
 public class CompilationMapper {

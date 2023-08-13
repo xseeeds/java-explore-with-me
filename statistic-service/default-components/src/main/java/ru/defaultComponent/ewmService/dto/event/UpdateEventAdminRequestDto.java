@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.defaultComponent.ewmService.enums.StateAdminRequest;
-
+import ru.defaultComponent.ewmService.enums.RequestAdminState;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -40,7 +39,7 @@ public class UpdateEventAdminRequestDto {
 
     Boolean requestModeration;
 
-    StateAdminRequest stateAction;
+    RequestAdminState stateAction;
 
     @Size(min = 3, max = 120)
     String title;

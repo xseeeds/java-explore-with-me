@@ -1,7 +1,7 @@
 package ru.practicum.user.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.user.CreateUserRequest;
+import ru.defaultComponent.ewmService.dto.user.CreateUserRequestDto;
 import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
 import ru.defaultComponent.ewmService.dto.user.UserShortResponseDto;
 import ru.practicum.user.model.UserEntity;
@@ -9,12 +9,12 @@ import ru.practicum.user.model.UserEntity;
 @UtilityClass
 public class UserMapper {
 
-    public UserEntity toUserEntity(CreateUserRequest createUserRequest) {
+    public UserEntity toUserEntity(CreateUserRequestDto createUserRequestDto) {
         return UserEntity
                 .builder()
-                .id(createUserRequest.getId())
-                .name(createUserRequest.getName())
-                .email(createUserRequest.getEmail())
+                .id(createUserRequestDto.getId())
+                .name(createUserRequestDto.getName())
+                .email(createUserRequestDto.getEmail())
                 .build();
     }
 

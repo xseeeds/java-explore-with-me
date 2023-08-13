@@ -13,7 +13,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.defaultComponent.ewmService.enums.EventState;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.user.model.UserEntity;
-
 import javax.persistence.GenerationType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -87,7 +86,7 @@ public class EventEntity {
     @Column(name = "participant_limit")
     Long participantLimit;
 
-    @Column(name = "published_on")
+    @Column(name = "published_date")
     LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")
@@ -104,4 +103,3 @@ public class EventEntity {
     Long views = 0L;
 
 }
-

@@ -8,29 +8,24 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.client.StatisticClient;
-import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
-import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
-import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
-import ru.defaultComponent.ewmService.dto.event.EventRequestStatusUpdateDto;
-import ru.defaultComponent.ewmService.dto.event.EventResponseStatusUpdateDto;
-import ru.defaultComponent.ewmService.dto.event.UpdateEventUserRequestDto;
-import ru.defaultComponent.ewmService.dto.request.ParticipationResponseDto;
+import ru.defaultComponent.ewmService.dto.event.*;
+import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseUpdateStateDto;
+import ru.defaultComponent.ewmService.dto.participation.ParticipationRequestUpdateStateDto;
+import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
 import ru.defaultComponent.ewmService.enums.EventState;
-import ru.defaultComponent.ewmService.dto.event.UpdateEventAdminRequestDto;
-import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
-import ru.defaultComponent.ewmService.enums.RequestStatus;
+import ru.defaultComponent.ewmService.enums.RequestState;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.defaultComponent.statisticServer.dto.ViewStatistic;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.category.service.CategoryAdminService;
-import ru.practicum.request.model.ParticipationEntity;
-import ru.practicum.request.service.RequestAdminService;
+import ru.practicum.participation.model.ParticipationEntity;
+import ru.practicum.participation.service.ParticipationAdminService;
 import ru.practicum.user.model.UserEntity;
 import ru.practicum.user.service.UserAdminService;
 import ru.practicum.event.dao.EventRepository;
-import ru.practicum.request.mapper.RequestMapper;
+import ru.practicum.participation.mapper.ParticipationMapper;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.EventEntity;
 
@@ -44,19 +39,20 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.getLocalDateTimeFormatting;
 import static ru.defaultComponent.ewmService.enums.EventState.*;
-import static ru.defaultComponent.ewmService.enums.StateAdminRequest.*;
-import static ru.defaultComponent.ewmService.enums.StateUserRequest.*;
-import static ru.defaultComponent.ewmService.enums.RequestStatus.CONFIRMED;
-import static ru.defaultComponent.ewmService.enums.RequestStatus.REJECTED;
+import static ru.defaultComponent.ewmService.enums.RequestAdminState.*;
+import static ru.defaultComponent.ewmService.enums.RequestUserState.*;
+import static ru.defaultComponent.ewmService.enums.RequestState.CONFIRMED;
+import static ru.defaultComponent.ewmService.enums.RequestState.REJECTED;
 import static ru.defaultComponent.pageRequest.UtilPage.getPageSortDescByProperties;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToUpdateEventAdmin;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToAddEventPrivate;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkEventDateToUpdateEventPrivate;
-import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndEvent;
+import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndMayBeNull;
 
 @Slf4j
 @Service
@@ -67,7 +63,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     private final EventRepository eventRepository;
     private final UserAdminService userAdminService;
     private final CategoryAdminService categoryAdminService;
-    private final RequestAdminService requestAdminService;
+    private final ParticipationAdminService participationAdminService;
     final StatisticClient statisticClient;
 
     @Override
@@ -90,13 +86,15 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Override
     public EventFullResponseDto updateEvent(long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto)
             throws BadRequestException, NotFoundException, ConflictException {
+        checkEventDateToUpdateEventAdmin(updateEventAdminRequestDto.getEventDate());
         final EventEntity eventEntity = this.findEventEntityById(eventId);
+        checkEventDateToUpdateEventAdmin(eventEntity.getEventDate());
         if (updateEventAdminRequestDto.getStateAction() != null) {
             if (eventEntity.getState() != PENDING && updateEventAdminRequestDto.getStateAction() == PUBLISH_EVENT) {
-                throw new ConflictException("ADMIN => Событие != PENDING");
+                throw new ConflictException("ADMIN => Событие уже рассмотрено");
             }
             if (eventEntity.getState() == PUBLISHED) {
-                throw new ConflictException("ADMIN => Событие => PUBLISHED");
+                throw new ConflictException("ADMIN => Событие уже опубликовано");
             }
             if (updateEventAdminRequestDto.getStateAction() == REJECT_EVENT) {
                 eventEntity.setState(CANCELED);
@@ -111,7 +109,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 updateEventAdminRequestDto.getCategory(),
                 updateEventAdminRequestDto.getDescription(),
                 updateEventAdminRequestDto.getEventDate(),
-                true,
                 updateEventAdminRequestDto.getLocation(),
                 updateEventAdminRequestDto.getPaid(),
                 updateEventAdminRequestDto.getParticipantLimit(),
@@ -133,23 +130,23 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
 
     @Override
     public EventEntity findEventEntityById(long eventId) throws NotFoundException {
-        log.info("ADMIN => запрос события по id => {} для СЕРВИСОВ", eventId);
+        log.info("ADMIN => запрос события по id => {}", eventId);
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Событие по id => " + eventId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Событие по id => " + eventId + " не существует"));
     }
 
     @Override
     public EventEntity findEventEntityByIdAndStatusPublished(long eventId) throws NotFoundException {
-        log.info("ADMIN => запрос события со статусом PUBLISHED по id => {} для СЕРВИСОВ", eventId);
+        log.info("ADMIN => запрос события со статусом PUBLISHED по id => {}", eventId);
         return eventRepository.findByIdAndState(eventId, PUBLISHED)
                 .orElseThrow(() -> new NotFoundException(
-                        "PUBLIC => Событие по id => " + eventId + " != PUBLISHED"));
+                        "PUBLIC => Событие по id => " + eventId + " ещё не опубликовано"));
     }
 
     @Override
-    public void checkEventIsExistById(long eventId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует событие по id => {} для СЕРВИСОВ", eventId);
+    public void checkEventEntityIsExistById(long eventId) throws NotFoundException {
+        log.info("ADMIN => Запрос существует событие по id => {}", eventId);
         if (!eventRepository.existsById(eventId)) {
             throw new NotFoundException("ADMIN => Событие по id => " + eventId + " не существует");
         }
@@ -160,19 +157,29 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Override
     public void saveEventEntity(EventEntity eventEntity) {
         eventRepository.save(eventEntity);
-        log.info("ADMIN => Запрос сохранения события по id => {} для СЕРВИСОВ", eventEntity.getId());
+        log.info("ADMIN => Запрос сохранения события по id => {}", eventEntity.getId());
+    }
+
+    @Override
+    public void checkEventsByCategoryId(long categoryId) throws ConflictException {
+        log.info("ADMIN => Категория по id => {} связана с событием", categoryId);
+        if (eventRepository.existsByCategory(categoryId)) {
+            throw new ConflictException("ADMIN => Категория по id => " + categoryId + " связана с событием");
+        }
     }
 
     @Transactional
     @Modifying
     @Override
-    public EventFullResponseDto addNewEvent(long userId, CreateEventRequestDto createEventRequestDto) throws BadRequestException, NotFoundException {
+    public EventFullResponseDto addNewEvent(long userId, CreateEventRequestDto createEventRequestDto)
+            throws BadRequestException, NotFoundException {
+        checkEventDateToAddEventPrivate(createEventRequestDto.getEventDate());
         final UserEntity userEntity = userAdminService.findUserEntityById(userId);
-        final CategoryEntity categoryEntity = categoryAdminService.findCategoryEntityById(createEventRequestDto.getCategory());
+        final CategoryEntity categoryEntity = categoryAdminService.findCategoryEntityById(
+                createEventRequestDto.getCategory());
         final EventEntity eventEntity = EventMapper
                 .toNewEventEntity(
                         createEventRequestDto, userEntity, categoryEntity);
-        checkEventDateToAddEventPrivate(eventEntity.getEventDate());
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(
                         eventRepository.save(eventEntity));
@@ -182,7 +189,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
 
     @Override
     public List<EventShortResponseDto> getAllUserEvents(long userId, int from, int size) throws NotFoundException {
-        userAdminService.checkUserIsExistById(userId);
+        userAdminService.checkUserEntityIsExistById(userId);
         final Page<EventShortResponseDto> eventShortDtoPage = eventRepository
                 .findAllByInitiator(
                         userId, getPageSortDescByProperties(from, size, "eventDate"))
@@ -194,7 +201,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
 
     @Override
     public EventFullResponseDto getEventByUser(long userId, long eventId) throws NotFoundException {
-        userAdminService.checkUserIsExistById(userId);
+        userAdminService.checkUserEntityIsExistById(userId);
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(
                         this.findEventEntityById(eventId));
@@ -205,13 +212,16 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Transactional
     @Modifying
     @Override
-    public EventFullResponseDto updateEventByUser(long userId, long eventId, UpdateEventUserRequestDto updateEventUserRequestDto)
+    public EventFullResponseDto updateEventByUser(long userId, long eventId,
+                                                  UpdateEventUserRequestDto updateEventUserRequestDto)
             throws BadRequestException, NotFoundException, ConflictException {
-        userAdminService.checkUserIsExistById(userId);
+        userAdminService.checkUserEntityIsExistById(userId);
+        checkEventDateToUpdateEventPrivate(updateEventUserRequestDto.getEventDate());
         final EventEntity eventEntity = this.findEventEntityById(eventId);
         if (eventEntity.getState() == PUBLISHED) {
-            throw new ConflictException("PRIVATE => Событие => PUBLISHED");
+            throw new ConflictException("PRIVATE => Событие уже опубликовано");
         }
+        checkEventDateToUpdateEventPrivate(eventEntity.getEventDate());
         if (updateEventUserRequestDto.getStateAction() != null) {
             if (updateEventUserRequestDto.getStateAction() == CANCEL_REVIEW) {
                 eventEntity.setState(CANCELED);
@@ -225,7 +235,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 updateEventUserRequestDto.getCategory(),
                 updateEventUserRequestDto.getDescription(),
                 updateEventUserRequestDto.getEventDate(),
-                false,
                 updateEventUserRequestDto.getLocation(),
                 updateEventUserRequestDto.getPaid(),
                 updateEventUserRequestDto.getParticipantLimit(),
@@ -239,13 +248,14 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     }
 
     @Override
-    public List<ParticipationResponseDto> getUserEventRequests(long userId, long eventId, int from, int size) throws NotFoundException {
-        userAdminService.checkUserIsExistById(userId);
-        this.checkEventIsExistById(eventId);
-        final Page<ParticipationResponseDto> participationRequestDtoList = requestAdminService
-                .findAllByEventId(
+    public List<ParticipationResponseDto> findAllParticipationByEventId(long userId, long eventId, int from, int size)
+            throws NotFoundException {
+        userAdminService.checkUserEntityIsExistById(userId);
+        this.checkEventEntityIsExistById(eventId);
+        final Page<ParticipationResponseDto> participationRequestDtoList = participationAdminService
+                .findAllParticipationByEventId(
                         eventId, getPageSortDescByProperties(from, size, "createdOn"))
-                .map(RequestMapper::toParticipationResponseDto);
+                .map(ParticipationMapper::toParticipationResponseDto);
         log.info("PRIVATE => Список заявок size => {}, на участие в событии по id => {}, пользователем по id => {} получен",
                 participationRequestDtoList.getTotalElements(), eventId, userId);
         return participationRequestDtoList.getContent();
@@ -254,61 +264,62 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
     @Transactional
     @Modifying
     @Override
-    public EventResponseStatusUpdateDto changeRequestsStatus(long userId, long eventId,
-                                                             EventRequestStatusUpdateDto eventRequestStatusUpdateDto)
+    public ParticipationResponseUpdateStateDto changeParticipationsState(long userId, long eventId,
+                                                                         ParticipationRequestUpdateStateDto participationRequestUpdateStateDto)
             throws NotFoundException, ConflictException {
-        userAdminService.checkUserIsExistById(userId);
+        userAdminService.checkUserEntityIsExistById(userId);
         final EventEntity eventEntity = this.findEventEntityById(eventId);
         if (eventEntity.getConfirmedRequests() >= eventEntity.getParticipantLimit()) {
             throw new ConflictException("PRIVATE => Достигнут лимит заявок на участие в событии");
         }
-        final Map<RequestStatus, List<ParticipationEntity>> requestEntityMap = new HashMap<>();
-        final List<ParticipationEntity> participationEntityList = requestAdminService
-                .findAllById(
-                        eventRequestStatusUpdateDto.getRequestIds());
+        final Map<RequestState, List<ParticipationEntity>> requestEntityMap = new HashMap<>();
+        final List<ParticipationEntity> participationEntityList = participationAdminService
+                .findAllParticipationById(
+                        participationRequestUpdateStateDto.getRequestIds());
         for (ParticipationEntity participationEntity : participationEntityList) {
-            if (participationEntity.getStatus() != RequestStatus.PENDING) {
-                throw new ConflictException("PRIVATE => Статус != PENDING");
+            if (participationEntity.getState() != RequestState.PENDING) {
+                throw new ConflictException("PRIVATE => Заявка на участие уже рассмотрена");
             }
             if (eventEntity.getParticipantLimit() == 0
                     || (eventEntity.getConfirmedRequests() < eventEntity.getParticipantLimit()
                     && !eventEntity.getRequestModeration())
                     || (eventEntity.getConfirmedRequests() < eventEntity.getParticipantLimit()
-                    && eventRequestStatusUpdateDto.getStatus() == CONFIRMED)
+                    && participationRequestUpdateStateDto.getStatus() == CONFIRMED)
             ) {
-                participationEntity.setStatus(CONFIRMED);
+                participationEntity.setState(CONFIRMED);
                 eventEntity.setConfirmedRequests(eventEntity.getConfirmedRequests() + 1);
             } else {
-                participationEntity.setStatus(REJECTED);
+                participationEntity.setState(REJECTED);
             }
-            requestEntityMap.computeIfAbsent(participationEntity.getStatus(),
+            requestEntityMap.computeIfAbsent(participationEntity.getState(),
                     v -> new ArrayList<>()).add(participationEntity);
         }
-        requestAdminService.saveAllRequestEntity(participationEntityList);
+        participationAdminService.saveAllParticipationEntity(participationEntityList);
         eventRepository.save(eventEntity);
-        final EventResponseStatusUpdateDto eventResponseStatusUpdateDto = EventResponseStatusUpdateDto
+        final ParticipationResponseUpdateStateDto participationResponseUpdateStateDto = ParticipationResponseUpdateStateDto
                 .builder()
                 .confirmedRequests(requestEntityMap.getOrDefault(CONFIRMED, emptyList())
                         .stream()
-                        .map(RequestMapper::toParticipationResponseDto)
+                        .map(ParticipationMapper::toParticipationResponseDto)
                         .collect(toList()))
                 .rejectedRequests(requestEntityMap.getOrDefault(REJECTED, emptyList())
                         .stream()
-                        .map(RequestMapper::toParticipationResponseDto)
+                        .map(ParticipationMapper::toParticipationResponseDto)
                         .collect(toList()))
                 .build();
         log.info("PRIVATE => Изменение статуса события по id => {} пользователем по id => {}", eventId, userId);
-        return eventResponseStatusUpdateDto;
+        return participationResponseUpdateStateDto;
     }
 
     @Override
     public List<EventShortResponseDto> getAllEvents(String text, List<Long> categories, Boolean paid,
                                                     String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                                    String sort, int from, int size, HttpServletRequest httpServletRequest) throws BadRequestException {
+                                                    String sort, int from, int size, HttpServletRequest httpServletRequest)
+            throws BadRequestException {
         AtomicReference<LocalDateTime> start = new AtomicReference<>(getLocalDateTimeFormatting(rangeStart));
         LocalDateTime end = getLocalDateTimeFormatting(rangeEnd);
-        checkStartIsAfterEndEvent(start.get(), end);
-        PageRequest pageRequest;
+        checkStartIsAfterEndMayBeNull(start.get(), end);
+        final PageRequest pageRequest;
         if (sort != null) {
             if (sort.equals("EVENT_DATE")) {
                 pageRequest = getPageSortDescByProperties(from, size, "eventDate");
@@ -327,25 +338,29 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         if (start.get() == null && end == null) {
             eventEntityPage.forEach(eventEntity -> {
                 eventIds.add(eventEntity.getId());
-                if (start.get() == null || !start.get().isAfter(eventEntity.getPublishedOn())) {
+                if (start.get() == null ||
+                        (eventEntity.getPublishedOn() != null && !start.get().isAfter(eventEntity.getPublishedOn()))
+                ) {
                     start.set(eventEntity.getPublishedOn());
                 }
             });
-            if (start.get() == null) {
-                start.set(LocalDateTime.now());
-            }
             end = LocalDateTime.now().plusSeconds(1L);
         } else {
             eventEntityPage.forEach(eventEntity -> eventIds.add(eventEntity.getId()));
         }
-        final Map<Long, Long> eventIdViewHitMap = statisticClient.getStatistics(start.get(), end,
-                        eventIds.stream()
-                                .map(eventId -> httpServletRequest.getRequestURI() + "/" + eventId)
-                                .collect(toList()),
-                        true)
-                .stream()
-                .collect(toMap(v -> Long.parseLong(v.getUri().substring(
-                                v.getUri().lastIndexOf("/") + 1)), ViewStatistic::getHits));
+        final Map<Long, Long> eventIdViewHitMap;
+        if (start.get() != null) {
+            eventIdViewHitMap = statisticClient.getStatistics(start.get(), end,
+                            eventIds.stream()
+                                    .map(eventId -> httpServletRequest.getRequestURI() + "/" + eventId)
+                                    .collect(toList()),
+                            true)
+                    .stream()
+                    .collect(toMap(v -> Long.parseLong(v.getUri().substring(
+                            v.getUri().lastIndexOf("/") + 1)), ViewStatistic::getHits));
+        } else {
+            eventIdViewHitMap = emptyMap();
+        }
         final Page<EventShortResponseDto> eventShortResponseDtoPage = eventEntityPage
                 .map(eventEntity -> {
                     eventEntity.setViews(eventIdViewHitMap.getOrDefault(eventEntity.getId(), 0L));
@@ -353,11 +368,10 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 });
         log.info("PUBLIC => Поиск событий => totalElements => {} text => {}, categories => {}, paid => {}, " +
                         "rangeStart => {}, rangeEnd => {}, onlyAvailable => {}, sort => {}, from => {}, size => {}",
-                eventShortResponseDtoPage.getTotalElements(), text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+                eventShortResponseDtoPage.getTotalElements(), text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+                sort, from, size);
         return eventShortResponseDtoPage.getContent();
     }
-
-    //TODO !QUERYDSL
 
     @Override
     public EventFullResponseDto getEventById(long eventId, HttpServletRequest httpServletRequest) throws NotFoundException {
@@ -369,24 +383,23 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         final EventFullResponseDto eventFullResponseDto = EventMapper
                 .toEventFullResponseDto(eventEntity);
         if (!viewStatisticList.isEmpty() && Objects.equals(Long.parseLong(viewStatisticList.get(0).getUri().substring(
-                        viewStatisticList.get(0).getUri().lastIndexOf("/") + 1)), eventFullResponseDto.getId())) {
+                viewStatisticList.get(0).getUri().lastIndexOf("/") + 1)), eventFullResponseDto.getId())) {
             eventFullResponseDto.setViews(viewStatisticList.get(0).getHits());
         }
         log.info("PUBLIC => Событие по id => {} получено", eventId);
         return eventFullResponseDto;
     }
 
-    private void setEventFields(EventEntity eventEntity,
-                                String annotation,
-                                Long category,
-                                String description,
-                                LocalDateTime eventDate,
-                                boolean adminOrUser,
-                                LocationRequestDto location,
-                                Boolean paid,
-                                Long participantLimit,
-                                Boolean requestModeration,
-                                String title) {
+    private void setEventFields(final EventEntity eventEntity,
+                                final String annotation,
+                                final Long category,
+                                final String description,
+                                final LocalDateTime eventDate,
+                                final LocationRequestDto location,
+                                final Boolean paid,
+                                final Long participantLimit,
+                                final Boolean requestModeration,
+                                final String title) {
         if (annotation != null) {
             eventEntity.setAnnotation(annotation);
         }
@@ -400,11 +413,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
             eventEntity.setDescription(description);
         }
         if (eventDate != null) {
-            if (adminOrUser) {
-                checkEventDateToUpdateEventAdmin(eventDate);
-            } else {
-                checkEventDateToUpdateEventPrivate(eventDate);
-            }
             eventEntity.setEventDate(eventDate);
         }
         if (location != null) {
@@ -416,7 +424,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         if (participantLimit != null) {
             eventEntity.setParticipantLimit(participantLimit);
         }
-        if (requestModeration != null && adminOrUser) {
+        if (requestModeration != null) {
             eventEntity.setRequestModeration(requestModeration);
         }
         if (title != null) {

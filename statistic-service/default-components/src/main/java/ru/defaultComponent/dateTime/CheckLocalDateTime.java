@@ -2,13 +2,12 @@ package ru.defaultComponent.dateTime;
 
 import lombok.experimental.UtilityClass;
 import ru.defaultComponent.exception.exp.BadRequestException;
-
 import java.time.LocalDateTime;
 
 @UtilityClass
 public class CheckLocalDateTime {
 
-    public void checkStartIsAfterEndEvent(LocalDateTime start, LocalDateTime end) {
+    public void checkStartIsAfterEndMayBeNull(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
             return;
         }
@@ -17,7 +16,7 @@ public class CheckLocalDateTime {
         }
     }
 
-    public void checkStartIsAfterEndStatistic(LocalDateTime start, LocalDateTime end) {
+    public void checkStartIsAfterEndNotBeNull(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
             throw new BadRequestException("PUBLIC => Время начала и окончания не должна быть null");
         }
@@ -27,8 +26,8 @@ public class CheckLocalDateTime {
     }
 
     public void checkEventDateToUpdateEventAdmin(LocalDateTime eventDate) {
-        if (eventDate == null || !eventDate.isAfter(LocalDateTime.now().plusHours(1))) {
-            throw new BadRequestException("ADMIN => Событие не может быть обновлено в первый час после публикации");
+        if (eventDate != null && !eventDate.isAfter(LocalDateTime.now().plusHours(1))) {
+            throw new BadRequestException("ADMIN => Нельзя внести изменения в течении часа до его начала");
         }
     }
 
@@ -39,7 +38,7 @@ public class CheckLocalDateTime {
     }
 
     public void checkEventDateToUpdateEventPrivate(LocalDateTime eventDate) {
-        if (eventDate == null || !eventDate.isAfter(LocalDateTime.now().plusHours(2))) {
+        if (eventDate != null && !eventDate.isAfter(LocalDateTime.now().plusHours(2))) {
             throw new BadRequestException("PRIVATE => Нельзя внести изменения в течении двух часов до его начала");
         }
     }

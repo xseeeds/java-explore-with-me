@@ -3,7 +3,6 @@ package ru.server.mapper;
 import lombok.experimental.UtilityClass;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.server.model.EndpointHitEntity;
-
 import java.util.List;
 
 import static java.util.Collections.emptyList;

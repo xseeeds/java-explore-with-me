@@ -15,7 +15,6 @@ import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.CompilationEntity;
 import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.event.service.EventAdminService;
-
 import java.util.List;
 
 @Slf4j
@@ -64,7 +63,7 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
         final CompilationResponseDto updatedCompilationResponseDto = CompilationMapper
                 .toCompilationResponseDto(
                         compilationRepository.save(compilationEntity));
-        log.info("ADMIN => Обновлена подборка событий с id => {}", compilationId);
+        log.info("ADMIN => Обновлена подборка событий по id => {}", compilationId);
         return updatedCompilationResponseDto;
     }
 
@@ -72,22 +71,22 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
     @Modifying
     @Override
     public void deleteCompilation(long compilationId) throws NotFoundException {
-        this.checkCompilationIsExistById(compilationId);
+        this.checkCompilationEntityIsExistById(compilationId);
         compilationRepository.deleteById(compilationId);
-        log.info("ADMIN => Удалена подборка событий с id => {}", compilationId);
+        log.info("ADMIN => Удалена подборка событий по id => {}", compilationId);
     }
 
     @Override
     public CompilationEntity findCompilationEntityById(long compilationId) throws NotFoundException {
-        log.info("ADMIN => запрос подборки по id => {} для СЕРВИСОВ", compilationId);
+        log.info("ADMIN => запрос подборки по id => {}", compilationId);
         return compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(
-                        "ADMIN => Подборка по id => " + compilationId + " не существует поиск СЕРВИСОВ"));
+                        "ADMIN => Подборка по id => " + compilationId + " не существует"));
     }
 
     @Override
-    public void checkCompilationIsExistById(long compilationId) throws NotFoundException {
-        log.info("ADMIN => Запрос существует подборка по id => {} для СЕРВИСОВ", compilationId);
+    public void checkCompilationEntityIsExistById(long compilationId) throws NotFoundException {
+        log.info("ADMIN => Запрос существует подборка по id => {}", compilationId);
         if (!compilationRepository.existsById(compilationId)) {
             throw new NotFoundException("ADMIN => Подборка по id => " + compilationId + " не существует");
         }
@@ -108,7 +107,7 @@ public class CompilationServiceImpl implements CompilationAdminService, Compilat
         final CompilationResponseDto compilationResponseDto = CompilationMapper
                 .toCompilationResponseDto(
                         this.findCompilationEntityById(compilationId));
-        log.info("PUBLIC => Запрошена подборка событий с id => {}", compilationId);
+        log.info("PUBLIC => Запрошена подборка событий по id => {}", compilationId);
         return compilationResponseDto;
     }
 

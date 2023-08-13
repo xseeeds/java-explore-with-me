@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+
+import static java.lang.Boolean.FALSE;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ public class CreateCompilationRequestDto {
 
     List<Long> events;
 
-    Boolean pinned = Boolean.FALSE;
+    Boolean pinned = FALSE;
 
     @NotNull
     @NotBlank
