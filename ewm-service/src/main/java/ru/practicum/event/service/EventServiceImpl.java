@@ -109,7 +109,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 updateEventAdminRequestDto.getCategory(),
                 updateEventAdminRequestDto.getDescription(),
                 updateEventAdminRequestDto.getEventDate(),
-                true,
                 updateEventAdminRequestDto.getLocation(),
                 updateEventAdminRequestDto.getPaid(),
                 updateEventAdminRequestDto.getParticipantLimit(),
@@ -236,7 +235,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                 updateEventUserRequestDto.getCategory(),
                 updateEventUserRequestDto.getDescription(),
                 updateEventUserRequestDto.getEventDate(),
-                false,
                 updateEventUserRequestDto.getLocation(),
                 updateEventUserRequestDto.getPaid(),
                 updateEventUserRequestDto.getParticipantLimit(),
@@ -397,7 +395,6 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
                                 final Long category,
                                 final String description,
                                 final LocalDateTime eventDate,
-                                final boolean adminOrUser,
                                 final LocationRequestDto location,
                                 final Boolean paid,
                                 final Long participantLimit,
@@ -427,7 +424,7 @@ public class EventServiceImpl implements EventAdminService, EventPrivateService,
         if (participantLimit != null) {
             eventEntity.setParticipantLimit(participantLimit);
         }
-        if (requestModeration != null && adminOrUser) {
+        if (requestModeration != null) {
             eventEntity.setRequestModeration(requestModeration);
         }
         if (title != null) {
