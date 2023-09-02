@@ -15,7 +15,7 @@ services:
 
   stats-server:
     restart: on-failure
-    build: ./statistic-service/statistic-server
+    build: ./ewm-service/statistic-server
     container_name: stats-server
     ports:
       - "9090:9090"
