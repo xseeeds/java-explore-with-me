@@ -11,9 +11,10 @@
 	</parent>
 
 	<name>Explore With Me</name>
-    <modules>
-		<module>statistic-service</module>
-        <module>ewm-service</module>
+
+	<modules>
+		<module>ewm-server</module>
+		<module>ewm-service</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
@@ -154,6 +155,8 @@
 		</pluginManagement>
 	</build>
 
+
+
 	<profiles>
 		<profile>
 			<id>check</id>
@@ -178,8 +181,6 @@
 				</plugins>
 			</reporting>
 		</profile>
-
-
 
 		<profile>
 			<id>coverage</id>

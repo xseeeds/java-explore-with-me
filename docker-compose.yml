@@ -38,9 +38,9 @@ services:
       - POSTGRES_USER=explorer
       - POSTGRES_PASSWORD=iamroot
 
-  ewm-service:
+  ewm-server:
     restart: on-failure
-    build: ./ewm-service
+    build: ./ewm-server
     container_name: ewm-server
     ports:
       - "8080:8080"
