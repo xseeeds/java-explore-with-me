@@ -11,8 +11,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>EWN Service</name>
-
     <artifactId>ewm-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
