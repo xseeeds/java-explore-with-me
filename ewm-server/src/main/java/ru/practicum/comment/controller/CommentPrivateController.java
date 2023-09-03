@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
-import ru.defaultComponent.ewmService.dto.comment.CreateCommentRequestDto;
-import ru.defaultComponent.ewmService.dto.comment.UpdateCommentUserRequestDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CreateCommentRequestDto;
+import ru.defaultComponent.ewmServer.dto.comment.UpdateCommentUserRequestDto;
 import ru.practicum.comment.service.CommentPrivateService;
 
 import javax.validation.Valid;

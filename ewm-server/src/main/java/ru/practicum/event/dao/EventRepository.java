@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.defaultComponent.ewmService.enums.EventState;
+import ru.defaultComponent.ewmServer.enums.EventState;
 import ru.practicum.event.model.EventEntity;
 
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     Page<EventEntity> findAllByInitiator(long eventId, Pageable page);
 
     @Query("SELECT ee FROM EventEntity AS ee " +
-            "WHERE ee.state = ru.defaultComponent.ewmService.enums.EventState.PUBLISHED " +
+            "WHERE ee.state = ru.defaultComponent.ewmServer.enums.EventState.PUBLISHED " +
             "AND (:categories IS NULL OR ee.category IN :categories OR ee.category IS NULL)" +
             "AND (:paid IS NULL OR ee.paid = :paid OR ee.paid IS NULL) " +
             "AND (coalesce(:start, ee.eventDate) <= ee.eventDate AND coalesce(:end, ee.eventDate) >= ee.eventDate)" +

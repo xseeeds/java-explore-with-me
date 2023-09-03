@@ -1,8 +1,8 @@
 package ru.practicum.comment.service;
 
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
-import ru.defaultComponent.ewmService.dto.comment.CreateCommentRequestDto;
-import ru.defaultComponent.ewmService.dto.comment.UpdateCommentUserRequestDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CreateCommentRequestDto;
+import ru.defaultComponent.ewmServer.dto.comment.UpdateCommentUserRequestDto;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 

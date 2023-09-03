@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
+import ru.defaultComponent.ewmServer.dto.category.CategoryResponseDto;
 import ru.practicum.category.service.CategoryPublicService;
 import javax.validation.constraints.Positive;
 import java.util.List;

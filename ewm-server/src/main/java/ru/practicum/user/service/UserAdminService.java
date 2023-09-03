@@ -1,7 +1,7 @@
 package ru.practicum.user.service;
 
-import ru.defaultComponent.ewmService.dto.user.CreateUserRequestDto;
-import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
+import ru.defaultComponent.ewmServer.dto.user.CreateUserRequestDto;
+import ru.defaultComponent.ewmServer.dto.user.UserResponseDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.user.model.UserEntity;
 import java.util.List;

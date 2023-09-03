@@ -1,8 +1,8 @@
 package ru.practicum.compilation.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
+import ru.defaultComponent.ewmServer.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmServer.dto.compilation.CreateCompilationRequestDto;
 import ru.practicum.compilation.model.CompilationEntity;
 import ru.practicum.event.mapper.EventMapper;
 import static java.util.Collections.emptyList;

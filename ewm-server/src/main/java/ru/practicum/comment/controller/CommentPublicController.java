@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
 import ru.practicum.comment.service.CommentPublicService;
 
 import javax.validation.constraints.Positive;

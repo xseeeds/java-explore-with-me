@@ -1,9 +1,9 @@
 package ru.practicum.event.service;
 
-import ru.defaultComponent.ewmService.dto.event.*;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseUpdateStateDto;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationRequestUpdateStateDto;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.defaultComponent.ewmServer.dto.event.*;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseUpdateStateDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationRequestUpdateStateDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseDto;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;

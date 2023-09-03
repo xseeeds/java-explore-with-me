@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import ru.defaultComponent.ewmService.dto.comment.*;
-import ru.defaultComponent.ewmService.enums.EventState;
+import ru.defaultComponent.ewmServer.dto.comment.*;
+import ru.defaultComponent.ewmServer.enums.EventState;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.comment.mapper.CommentMapper;
-import ru.defaultComponent.ewmService.enums.CommentState;
+import ru.defaultComponent.ewmServer.enums.CommentState;
 import ru.practicum.comment.dao.CommentRepository;
 import ru.practicum.comment.model.CommentEntity;
 import ru.practicum.event.model.EventEntity;
@@ -28,9 +28,9 @@ import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 import static ru.defaultComponent.dateTime.DefaultDateTimeFormatter.getLocalDateTimeFormatting;
 import static ru.defaultComponent.dateTime.CheckLocalDateTime.checkStartIsAfterEndMayBeNull;
 import static ru.defaultComponent.pageRequest.UtilPage.getPageSortDescByProperties;
-import static ru.defaultComponent.ewmService.enums.RequestAdminState.*;
-import static ru.defaultComponent.ewmService.enums.RequestUserState.*;
-import static ru.defaultComponent.ewmService.enums.CommentState.*;
+import static ru.defaultComponent.ewmServer.enums.RequestAdminState.*;
+import static ru.defaultComponent.ewmServer.enums.RequestUserState.*;
+import static ru.defaultComponent.ewmServer.enums.CommentState.*;
 
 @Slf4j
 @Service

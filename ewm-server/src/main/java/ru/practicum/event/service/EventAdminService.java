@@ -1,8 +1,8 @@
 package ru.practicum.event.service;
 
-import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
-import ru.defaultComponent.ewmService.enums.EventState;
-import ru.defaultComponent.ewmService.dto.event.UpdateEventAdminRequestDto;
+import ru.defaultComponent.ewmServer.dto.event.EventFullResponseDto;
+import ru.defaultComponent.ewmServer.enums.EventState;
+import ru.defaultComponent.ewmServer.dto.event.UpdateEventAdminRequestDto;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;

@@ -1,11 +1,11 @@
 package ru.practicum.event.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.event.EventShortResponseDto;
-import ru.defaultComponent.ewmService.dto.event.CreateEventRequestDto;
-import ru.defaultComponent.ewmService.dto.event.EventFullResponseDto;
-import ru.defaultComponent.ewmService.dto.event.LocationRequestDto;
-import ru.defaultComponent.ewmService.dto.event.LocationResponseDto;
+import ru.defaultComponent.ewmServer.dto.event.EventShortResponseDto;
+import ru.defaultComponent.ewmServer.dto.event.CreateEventRequestDto;
+import ru.defaultComponent.ewmServer.dto.event.EventFullResponseDto;
+import ru.defaultComponent.ewmServer.dto.event.LocationRequestDto;
+import ru.defaultComponent.ewmServer.dto.event.LocationResponseDto;
 import ru.defaultComponent.statisticServer.dto.StatisticRequest;
 import ru.practicum.category.model.CategoryEntity;
 import ru.practicum.event.model.EventEntity;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.defaultComponent.ewmService.enums.EventState.PENDING;
+import static ru.defaultComponent.ewmServer.enums.EventState.PENDING;
 
 @UtilityClass
 public class EventMapper {

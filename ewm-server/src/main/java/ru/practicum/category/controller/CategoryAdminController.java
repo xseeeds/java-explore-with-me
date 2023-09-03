@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.category.CreateCategoryRequestDto;
-import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
+import ru.defaultComponent.ewmServer.dto.category.CreateCategoryRequestDto;
+import ru.defaultComponent.ewmServer.dto.category.CategoryResponseDto;
 import ru.practicum.category.service.CategoryAdminService;
 
 import javax.validation.Valid;

@@ -1,6 +1,6 @@
 package ru.practicum.comment.service;
 
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
 import java.util.List;
 
 public interface CommentPublicService {

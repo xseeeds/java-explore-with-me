@@ -1,9 +1,9 @@
 package ru.practicum.user.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.user.CreateUserRequestDto;
-import ru.defaultComponent.ewmService.dto.user.UserResponseDto;
-import ru.defaultComponent.ewmService.dto.user.UserShortResponseDto;
+import ru.defaultComponent.ewmServer.dto.user.CreateUserRequestDto;
+import ru.defaultComponent.ewmServer.dto.user.UserResponseDto;
+import ru.defaultComponent.ewmServer.dto.user.UserShortResponseDto;
 import ru.practicum.user.model.UserEntity;
 
 @UtilityClass

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseDto;
 import ru.practicum.participation.service.ParticipationPrivateService;
 import javax.validation.constraints.Positive;
 import java.util.List;

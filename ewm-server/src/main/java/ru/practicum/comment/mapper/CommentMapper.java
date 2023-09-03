@@ -1,8 +1,8 @@
 package ru.practicum.comment.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.comment.CreateCommentRequestDto;
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CreateCommentRequestDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
 import ru.practicum.comment.model.CommentEntity;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.EventEntity;
@@ -11,7 +11,7 @@ import ru.practicum.user.model.UserEntity;
 
 import java.time.LocalDateTime;
 
-import static ru.defaultComponent.ewmService.enums.CommentState.PENDING;
+import static ru.defaultComponent.ewmServer.enums.CommentState.PENDING;
 
 @UtilityClass
 public class CommentMapper {

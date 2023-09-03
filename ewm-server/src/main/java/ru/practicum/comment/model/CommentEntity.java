@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import ru.defaultComponent.ewmService.enums.CommentState;
+import ru.defaultComponent.ewmServer.enums.CommentState;
 import ru.practicum.event.model.EventEntity;
 import ru.practicum.user.model.UserEntity;
 import javax.persistence.GenerationType;

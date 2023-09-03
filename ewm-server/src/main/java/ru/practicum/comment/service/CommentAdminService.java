@@ -1,10 +1,10 @@
 package ru.practicum.comment.service;
 
-import ru.defaultComponent.ewmService.dto.comment.CommentRequestUpdateStateDto;
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseDto;
-import ru.defaultComponent.ewmService.dto.comment.CommentResponseUpdateStateDto;
-import ru.defaultComponent.ewmService.dto.comment.UpdateCommentAdminRequestDto;
-import ru.defaultComponent.ewmService.enums.CommentState;
+import ru.defaultComponent.ewmServer.dto.comment.CommentRequestUpdateStateDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseDto;
+import ru.defaultComponent.ewmServer.dto.comment.CommentResponseUpdateStateDto;
+import ru.defaultComponent.ewmServer.dto.comment.UpdateCommentAdminRequestDto;
+import ru.defaultComponent.ewmServer.enums.CommentState;
 import ru.defaultComponent.exception.exp.BadRequestException;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;

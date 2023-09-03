@@ -1,6 +1,6 @@
 package ru.practicum.participation.service;
 
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseDto;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import java.util.List;

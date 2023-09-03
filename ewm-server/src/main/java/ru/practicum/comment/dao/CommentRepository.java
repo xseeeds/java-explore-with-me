@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.defaultComponent.ewmService.enums.CommentState;
+import ru.defaultComponent.ewmServer.enums.CommentState;
 import ru.practicum.comment.model.CommentEntity;
 import java.time.LocalDateTime;
 import java.util.List;

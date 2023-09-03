@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseDto;
 import ru.defaultComponent.exception.exp.ConflictException;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.participation.mapper.ParticipationMapper;
@@ -20,8 +20,8 @@ import ru.practicum.event.service.EventAdminService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.defaultComponent.ewmService.enums.EventState.PUBLISHED;
-import static ru.defaultComponent.ewmService.enums.RequestState.*;
+import static ru.defaultComponent.ewmServer.enums.EventState.PUBLISHED;
+import static ru.defaultComponent.ewmServer.enums.RequestState.*;
 import static ru.defaultComponent.pageRequest.UtilPage.getPageSortAscByProperties;
 
 @Slf4j

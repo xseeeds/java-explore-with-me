@@ -1,8 +1,8 @@
 package ru.practicum.compilation.service;
 
-import ru.defaultComponent.ewmService.dto.compilation.CompilationResponseDto;
-import ru.defaultComponent.ewmService.dto.compilation.CreateCompilationRequestDto;
-import ru.defaultComponent.ewmService.dto.compilation.UpdateCompilationRequestDto;
+import ru.defaultComponent.ewmServer.dto.compilation.CompilationResponseDto;
+import ru.defaultComponent.ewmServer.dto.compilation.CreateCompilationRequestDto;
+import ru.defaultComponent.ewmServer.dto.compilation.UpdateCompilationRequestDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import ru.practicum.compilation.model.CompilationEntity;
 

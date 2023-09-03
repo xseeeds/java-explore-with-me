@@ -1,7 +1,7 @@
 package ru.practicum.participation.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.defaultComponent.ewmService.dto.participation.ParticipationResponseDto;
+import ru.defaultComponent.ewmServer.dto.participation.ParticipationResponseDto;
 import ru.practicum.participation.model.ParticipationEntity;
 
 @UtilityClass

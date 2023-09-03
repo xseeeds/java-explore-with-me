@@ -1,6 +1,6 @@
 package ru.practicum.category.service;
 
-import ru.defaultComponent.ewmService.dto.category.CategoryResponseDto;
+import ru.defaultComponent.ewmServer.dto.category.CategoryResponseDto;
 import ru.defaultComponent.exception.exp.NotFoundException;
 import java.util.List;
 
